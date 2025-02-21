@@ -6,7 +6,7 @@
  *
  * @author Bill Siever
  */
-//% block=" Time and Date"
+//% block="Time and Date"
 //% color="#AA278D"  icon="\uf017"
 namespace timeanddate {
     /* 
