@@ -404,8 +404,8 @@ namespace timeanddate {
      * Get all values of time as numbers.  
      */
     //% block="time as numbers $hour:$minute.$second on $month/$day/$year" advanced=true
-    //% draggableParameters=variable
-    //% handlerStatement=1
+    //% handlerStatement
+    //% draggableParameters="reporter"
     //% weight=100
     export function numericTime(handler: (hour: Hour, minute: Minute, second: Second, month: Month, day: Day, year: Year) => void) {
         const cpuTime = cpuTimeInSeconds()
