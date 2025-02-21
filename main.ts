@@ -35,6 +35,16 @@ namespace timeanddate {
 
 
     // ********* Enumerations for parameter types ************************
+    
+    let monthName: string[][] = [
+        ["0","1","2","3","4","5","6","7","8","9","10","11"],
+        ["January","Febuary","March","April","May","June","July","Orgust","September","October","November","December"]
+        ]
+
+    let weekName: string[][] = [
+        ["0","1","2","3","4","5","6"],
+        ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+        ]
 
     export enum MornNight {
         //% block="am"
@@ -70,6 +80,10 @@ namespace timeanddate {
     }
 
     export enum DateFormat {
+        //% block="as day/subweekname/submonthname"
+        DWnsMns,
+        //% block="as day/weekname/monthname"
+        DWnMn,
         //% block="as month/day"
         MD,
         //% block="as month/day/year"
@@ -439,7 +453,16 @@ namespace timeanddate {
     export function date(format: DateFormat): string {
         const cpuTime = cpuTimeInSeconds()
         const t = timeFor(cpuTime)
+        const w = dateToDayOfWeek(t.month, t.day, t.year)
+        const dtIdx = [monthName[0].indexOf(t.month.toString()),weekName[0].indexOf(w.toString())]
+        const dtName = [monthName[1][dtIdx[0]],weekName[1][dtIdx[1]]]
         switch (format) {
+            case DateFormat.DWnsMns:
+                return t.day + "/" + dtName[1].substr(0, 3).toUpperCase() + "/" + dtName[0].substr(0, 3).toUpperCase()
+                break
+            case DateFormat.DWnMn:
+                return t.day + "/" + dtName[1] + "/" + dtName[0]
+                break
             case DateFormat.MD:
                 return t.month + "/" + t.day
                 break
@@ -449,6 +472,7 @@ namespace timeanddate {
             case DateFormat.YYYY_MM_DD:
                 return fullYear(t)
                 break
+
         }
         return ""
     }
