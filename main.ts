@@ -464,7 +464,7 @@ namespace timeanddate {
      * Current date month name as a string in the format
      * @param format the format to use
      */
-    //% block="month name as $format"
+    //% block="month name $format"
     //% weight=20
     export function nameMonth(format: MonthNameFormat): string {
         const cpuTime = cpuTimeInSeconds()
@@ -486,7 +486,7 @@ namespace timeanddate {
      * Current date week name as a string in the format
      * @param format the format to use
      */
-    //% block="month name as $format"
+    //% block="week name $format"
     //% weight=20
     export function nameWeek(format: WeekNameFormat): string {
         const cpuTime = cpuTimeInSeconds()
