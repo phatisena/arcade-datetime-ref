@@ -1,6 +1,6 @@
 /**
- * Provides a software based running clock for the time and date for the micro:bit. 
- * The micro:bit doesn't have a true real-time clock. The microbit uses a timer derived from the
+ * Provides a software based running clock for the time and date for the arcade. 
+ * The makecode arcade doesn't have a true real-time clock. The arcade uses a timer derived from the
  * 16MHz clock, which is crystal based and should have an accuracy near 10 part per million, 
  * or about 0.864 seconds/day.
  *
@@ -13,7 +13,7 @@ namespace timeanddate {
         This ensures that "time" is checked periodically and event handlers are called.  
     */
     game.onUpdateInterval(864, function() {
-        // Only run about every 2 s;  Micro:bit uses a ticker with a 32kHz period, so the count should increase by about 65kHz
+        // Only run about every 2 s;  Micro:bit uses a ticker with a 32kHz period, so the count should increase by about 65kHz for arcade or etc.
         const cpuTime = cpuTimeInSeconds()
         const t = timeFor(cpuTime)
         if (lastUpdateMinute != t.minute) {
@@ -90,6 +90,22 @@ namespace timeanddate {
         MDY,
         //% block="as year-month-day"
         YYYY_MM_DD
+    }
+
+    export enum MonthNameFormat {
+        //% block="as Fullname"
+        Fname,
+        //% block="as Subname"
+        Sname,
+    }
+
+    export enum WeekNameFormat {
+        //% block="as Fullname"
+        Fname,
+        //% block="as 3Subname"
+        S3name,
+        //% block="as 2Subname"
+        S2name,
     }
 
     type Month = uint8   // 1-12 Month of year
@@ -440,6 +456,54 @@ namespace timeanddate {
 
             case TimeFormat.HMM:
                 return hour + minute
+        }
+        return ""
+    }
+
+    /**
+     * Current date month name as a string in the format
+     * @param format the format to use
+     */
+    //% block="month name as $format"
+    //% weight=20
+    export function nameMonth(format: MonthNameFormat): string {
+        const cpuTime = cpuTimeInSeconds()
+        const t = timeFor(cpuTime)
+        const dtIdx = monthName[0].indexOf(t.month.toString())
+        const dtName = monthName[1][dtIdx]
+        switch (format) {
+            case MonthNameFormat.Fname:
+                return dtName
+                break
+            case MonthNameFormat.Sname:
+                return dtName.substr(0,3)
+                break
+        }
+        return ""
+    }
+
+    /**
+     * Current date week name as a string in the format
+     * @param format the format to use
+     */
+    //% block="month name as $format"
+    //% weight=20
+    export function nameWeek(format: WeekNameFormat): string {
+        const cpuTime = cpuTimeInSeconds()
+        const t = timeFor(cpuTime)
+        const w = dateToDayOfWeek(t.month, t.day, t.year)
+        const dtIdx = weekName[0].indexOf(w.toString())
+        const dtName = weekName[1][dtIdx]
+        switch (format) {
+            case WeekNameFormat.Fname:
+                return dtName
+                break
+            case WeekNameFormat.S3name:
+                return dtName.substr(0, 3)
+                break
+            case WeekNameFormat.S2name:
+                return dtName.substr(0, 2)
+                break
         }
         return ""
     }
