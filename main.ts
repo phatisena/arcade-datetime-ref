@@ -461,7 +461,7 @@ namespace timeanddate {
     }
 
     /**
-     * Current date month name as a string in the format
+     * Current date month name as a string in the format name
      * @param format the format to use
      */
     //% block="month name as $format"
@@ -483,7 +483,7 @@ namespace timeanddate {
     }
 
     /**
-     * Current date week name as a string in the format
+     * Current date week name as a string in the format name
      * @param format the format to use
      */
     //% block="week name as $format"
