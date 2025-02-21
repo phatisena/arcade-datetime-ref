@@ -42,7 +42,7 @@ namespace timeanddate {
         ]
 
     let weekName: string[][] = [
-        ["1","2","3","4","5","6","7"],
+        ["0","1","2","3","4","5","6"],
         ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
         ]
 
