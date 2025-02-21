@@ -12,7 +12,7 @@ namespace timeanddate {
     /* 
         This ensures that "time" is checked periodically and event handlers are called.  
     */
-    game.onUpdateInterval(1000, function() {
+    game.onUpdateInterval(864, function() {
         // Only run about every 2 s;  Micro:bit uses a ticker with a 32kHz period, so the count should increase by about 65kHz
         const cpuTime = cpuTimeInSeconds()
         const t = timeFor(cpuTime)
