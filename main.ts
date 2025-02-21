@@ -37,12 +37,12 @@ namespace timeanddate {
     // ********* Enumerations for parameter types ************************
     
     let monthName: string[][] = [
-        ["0","1","2","3","4","5","6","7","8","9","10","11"],
+        ["1","2","3","4","5","6","7","8","9","10","11","12"],
         ["January","Febuary","March","April","May","June","July","Orgust","September","October","November","December"]
         ]
 
     let weekName: string[][] = [
-        ["0","1","2","3","4","5","6"],
+        ["1","2","3","4","5","6","7"],
         ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
         ]
 
