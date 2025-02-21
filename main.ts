@@ -465,9 +465,9 @@ namespace timeanddate {
     }
 
     /**
-     * Seconds since start of micro:bit  
+     * Seconds since start of arcade 
      */
-    //% block="seconds since microbit start" advanced=true
+    //% block="seconds since arcade start" advanced=true
     //% weight=40
     export function secondsSinceReset(): number {
         return cpuTimeInSeconds()
