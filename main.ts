@@ -67,44 +67,44 @@ namespace timeanddate {
     }
 
     export enum TimeFormat {
-        //% block="as h:mm.ss am / pm"
+        //% block="h:mm.ss am / pm"
         HMMSSAMPM,
-        //% block="as hh:mm 24-hr"
+        //% block="hh:mm 24-hr"
         HHMM24hr,
-        //% block="as hh:mm.ss 24-hr"
+        //% block="hh:mm.ss 24-hr"
         HHMMSS24hr,
-        //% block="as h:mm"
+        //% block="h:mm"
         HMM,
-        //% block="as h:mm am / pm"
+        //% block="h:mm am / pm"
         HMMAMPM,
     }
 
     export enum DateFormat {
-        //% block="as day/subweekname/submonthname"
+        //% block=day/subweekname/submonthname"
         DWnsMns,
-        //% block="as day/weekname/monthname"
+        //% block="day/weekname/monthname"
         DWnMn,
-        //% block="as month/day"
+        //% block="month/day"
         MD,
-        //% block="as month/day/year"
+        //% block="month/day/year"
         MDY,
-        //% block="as year-month-day"
+        //% block="year-month-day"
         YYYY_MM_DD
     }
 
     export enum MonthNameFormat {
-        //% block="as Fullname"
+        //% block="Fullname"
         Fname,
-        //% block="as Subname"
+        //% block="Subname"
         Sname,
     }
 
     export enum WeekNameFormat {
-        //% block="as Fullname"
+        //% block="Fullname"
         Fname,
-        //% block="as 3Subname"
+        //% block="3Subname"
         S3name,
-        //% block="as 2Subname"
+        //% block="2Subname"
         S2name,
     }
 
@@ -464,7 +464,7 @@ namespace timeanddate {
      * Current date month name as a string in the format
      * @param format the format to use
      */
-    //% block="month name $format"
+    //% block="month name as $format"
     //% weight=20
     export function nameMonth(format: MonthNameFormat): string {
         const cpuTime = cpuTimeInSeconds()
@@ -486,7 +486,7 @@ namespace timeanddate {
      * Current date week name as a string in the format
      * @param format the format to use
      */
-    //% block="week name $format"
+    //% block="week name as $format"
     //% weight=20
     export function nameWeek(format: WeekNameFormat): string {
         const cpuTime = cpuTimeInSeconds()
