@@ -43,9 +43,9 @@ namespace TimeAndDate {
         if (dtid.indexOf(id) >= 0) {
             return id
         }
+        curid++
         dtid.push(curid)
         dtdata.push({month: 0,year: 0,day: 0,hour: 0,minute: 0,second: 0, dayOfYear: 0})
-        curid++
         return curid-1
     }
 
