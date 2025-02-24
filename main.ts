@@ -1,3 +1,30 @@
+
+namespace DateTimeData {
+
+    let kindid: number;
+
+    export function create() {
+        if (!(kindid)) kindid = 0
+        return kindid++
+    }
+
+    //%isKind
+    export const mainDateTime = create()
+
+}
+
+namespace TimeAndDate {
+    
+    //%shim=KIND_GET
+    //%kindMemberName=Datetime
+    //%blockId=datetime_kind
+    //%block="$arg"
+    //%kindNamespace=DateTimeData
+    //%kindPromptHint="enter your datetime here"
+    export function _datetimekindshadow(arg: number) { return arg }
+
+}
+
 /**
  * Provides a software based running clock for the time and date for the arcade. 
  * The makecode arcade doesn't have a true real-time clock. The arcade uses a timer derived from the
@@ -8,7 +35,20 @@
  */
 //% block="Time and Date"
 //% color="#AA278D"  icon="\uf017"
-namespace timeanddate {
+namespace TimeAndDate {
+
+    let dtdata: DateTime[] = [], dtid: number[] = [], curid = 0
+
+    function checkid(id: number) {
+        if (dtid.indexOf(id) >= 0) {
+            return id
+        }
+        dtid.push(curid)
+        dtdata.push({month: 0,year: 0,day: 0,hour: 0,minute: 0,second: 0, dayOfYear: 0})
+        curid++
+        return curid-1
+    }
+
     /* 
         This ensures that "time" is checked periodically and event handlers are called.  
     */
@@ -215,7 +255,7 @@ namespace timeanddate {
         return (((dateToDayOfYear(m, d, y) - 1) * 24 + hh) * 60 + mm) * 60 + ss
     }
 
-    function timeFor(cpuTime: SecondsCount): DateTime {
+    function timeFor(cpuTime: SecondsCount, kindid: number = null): DateTime {
         const deltaTime = cpuTime - cpuTimeAtSetpoint
         let sSinceStartOfYear = timeToSetpoint + deltaTime
         // Find elapsed years by counting up from start year and subtracting off complete years
@@ -247,7 +287,13 @@ namespace timeanddate {
 
         // Convert days to dd/ mm
         const ddmm = dayOfYearToMonthAndDay(daysFromStartOfYear, y) // current year, y, not start year
-        return { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
+        
+        let kdid = 0
+        if (kindid) {
+            kdid = checkid(kindid)
+        }
+        dtdata[kdid] = { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
+        return dtdata[kdid]
     }
 
     //% shim=timeanddate::cpuTimeInSeconds
@@ -285,17 +331,18 @@ namespace timeanddate {
      * @param minute the minute (0-59)
      * @param second the second (0-59)
      */
+    //% blockid=datetime_set24hrtime
     //% block="set time from 24-hour time |  $hour | : $minute | . $second"
     //% hour.min=0 hour.max=23 hour.defl=13
     //% minute.min=0 minute.max=59 minute.defl=30
     //% second.min=0 second.max=59 second.defl=0
     //% weight=90
-    export function set24HourTime(hour: Hour, minute: Minute, second: Second) {
+    export function set24HourTime(hour: Hour, minute: Minute, second: Second, kindn: number=null) {
         hour = hour % 24
         minute = minute % 60
         second = second % 60
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime)
+        const t = timeFor(cpuTime, kindn)
         cpuTimeAtSetpoint = cpuTime
         timeToSetpoint = secondsSoFarForYear(t.month, t.day, t.year, hour, minute, second)
     }
@@ -306,16 +353,18 @@ namespace timeanddate {
      * @param day the day of the month 1-31
      * @param the year 2020-2050
      */
-    //% block="set date to | month $month | / day $day | / year $year"
+    //% blockid=datetime_setdate
+    //% block="set date to | month $month | / day $day | / year $year || to datetime kind $kindn"
+    //% kind.shadow=
     //% month.min=1 month.max=12 month.defl=1
     //% day.min=1 day.max=31 day.defl=20
     //% year.min=2020 year.max=2050 year.defl=2022
     //% weight=80
-    export function setDate(month: Month, day: Day, year: Year) {
+    export function setDate(month: Month, day: Day, year: Year, kindn: number=null) {
         month = month % 13
         day = day % 32
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime)
+        const t = timeFor(cpuTime, kindn)
         startYear = year
         cpuTimeAtSetpoint = cpuTime
         timeToSetpoint = secondsSoFarForYear(month, day, startYear, t.hour, t.minute, t.second)
@@ -328,13 +377,14 @@ namespace timeanddate {
      * @param second the second (0-59)
      * @param ampm morning or night
      */
+    //% block=datetime_settime
     //% block="set time to |  $hour | : $minute | . $second | $ampm"
     //% hour.min=1 hour.max=12 hour.defl=11
     //% minute.min=0 minute.max=59 minute.defl=30
     //% second.min=0 second.max=59 second.defl=0
     //% inlineInputMode=inline
     //% weight=100
-    export function setTime(hour: Hour, minute: Minute, second: Second, ampm: MornNight) {
+    export function setTime(hour: Hour, minute: Minute, second: Second, ampm: MornNight, kindn: number=null) {
         hour = hour % 13
         // Adjust to 24-hour time format
         if (ampm == MornNight.AM && hour == 12) {  // 12am -> 0 hundred hours
@@ -342,7 +392,7 @@ namespace timeanddate {
         } else if (ampm == MornNight.PM && hour != 12) {   // PMs other than 12 get shifted after 12:00 hours
             hour = hour + 12;
         }
-        set24HourTime(hour, minute, second);
+        set24HourTime(hour, minute, second, kindn);
     }
 
     /**
@@ -350,6 +400,7 @@ namespace timeanddate {
      * @param amount the amount of time to add (or subtract if negative).  To avoid "carries" use withTime blocks
      * @param unit the unit of time
      */
+    //% blockid=datetime_advancesetdatetime
     //% block="advance time/date by | $amount | $unit " advanced=true
     //% weight=50
     export function advanceBy(amount: number, unit: TimeUnit) {
@@ -366,6 +417,7 @@ namespace timeanddate {
      * Get the Day of the week  
      *  0=>Monday, 1=>Tuesday, etc.
      */
+    //% blockid=datetime_date2dayweek
     //% block="day of week for month $month / day $day / year $year" advanced=true
     //% month.min=1 month.max=12 month.defl=1
     //% day.min=1 day.max=31 day.defl=20
@@ -384,6 +436,7 @@ namespace timeanddate {
      * Get the Day of the year  
      *  Jan 1 = 1, Jan 2=2, Dec 31 is 365 or 366
      */
+    //% blockid=datetime_date2dayyear
     //% block="day of year for month $month / day $day / year $year" advanced=true
     //% month.min=1 month.max=12 month.defl=1
     //% day.min=1 day.max=31 day.defl=20
@@ -403,13 +456,14 @@ namespace timeanddate {
     /**
      * Get all values of time as numbers.  
      */
+    //% blockid=datetime_alldatetimetogetinstatement
     //% block="time as numbers $hour:$minute.$second on $month/$day/$year" advanced=true
     //% handlerStatement
     //% draggableParameters="reporter"
     //% weight=100
-    export function numericTime(handler: (hour: Hour, minute: Minute, second: Second, month: Month, day: Day, year: Year) => void) {
+    export function numericTime(kindn:number, handler: (hour: Hour, minute: Minute, second: Second, month: Month, day: Day, year: Year) => void) {
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime)
+        const t = timeFor(cpuTime, kindn)
         handler(t.hour, t.minute, t.second, t.month, t.day, t.year)
     }
 
@@ -417,11 +471,12 @@ namespace timeanddate {
      * Current time as a string in the format
      * @param format the format to use
      */
+    //% blockid=datetime_time2format
     //% block="time as $format"
     //% weight=70
-    export function time(format: TimeFormat): string {
+    export function time(format: TimeFormat, kindn: number=null): string {
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime)
+        const t = timeFor(cpuTime, kindn)
 
         // Handle 24-hour format with helper
         if (format == TimeFormat.HHMMSS24hr)
@@ -464,11 +519,12 @@ namespace timeanddate {
      * Current date month name as a string in the format name
      * @param format the format to use
      */
+    //% blockid=datetime_datemonth2format 
     //% block="month name as $format"
     //% weight=20
-    export function nameMonth(format: MonthNameFormat): string {
+    export function nameMonth(format: MonthNameFormat, kindn: number=null): string {
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime)
+        const t = timeFor(cpuTime,kindn)
         const dtIdx = monthName[0].indexOf(t.month.toString())
         const dtName = monthName[1][dtIdx]
         switch (format) {
@@ -486,9 +542,10 @@ namespace timeanddate {
      * Current date week name as a string in the format name
      * @param format the format to use
      */
+    //% blockid=datetime_dateweek2format
     //% block="week name as $format"
     //% weight=20
-    export function nameWeek(format: WeekNameFormat): string {
+    export function nameWeek(format: WeekNameFormat, kindn: number=null): string {
         const cpuTime = cpuTimeInSeconds()
         const t = timeFor(cpuTime)
         const w = dateToDayOfWeek(t.month, t.day, t.year)
@@ -512,11 +569,12 @@ namespace timeanddate {
      * Current date as a string in the format
      * @param format the format to use
      */
+    //% blockid=datetime_date2format
     //% block="date as $format"
     //% weight=60
-    export function date(format: DateFormat): string {
+    export function date(format: DateFormat, kindn:number=null): string {
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime)
+        const t = timeFor(cpuTime, kindn)
         const w = dateToDayOfWeek(t.month, t.day, t.year)
         const dtIdx = [monthName[0].indexOf(t.month.toString()),weekName[0].indexOf(w.toString())]
         const dtName = [monthName[1][dtIdx[0]],weekName[1][dtIdx[1]]]
@@ -544,17 +602,19 @@ namespace timeanddate {
     /**
      * Current date and time in a timestamp format (YYYY-MM-DD HH:MM.SS).  
      */
+    //% blockid=datetime_dateandtime 
     //% block="date and time stamp"
     //% weight=50
-    export function dateTime(): string {
+    export function dateTime(kindn: number=null): string {
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime)
+        const t = timeFor(cpuTime, kindn)
         return fullYear(t) + " " + fullTime(t)
     }
 
     /**
      * Seconds since start of arcade 
      */
+    //% blockid=datetime_secsincestart
     //% block="seconds since arcade start" advanced=true
     //% weight=40
     export function secondsSinceReset(): number {
@@ -565,6 +625,7 @@ namespace timeanddate {
     /**
      * Called when minutes change
      */
+    //% blockid=datetime_minuteupdate
     //% block="minute changed" advanced=true
     //% weight=85
     export function onMinuteChanged(handler: () => void) {
@@ -574,6 +635,7 @@ namespace timeanddate {
     /**
      * Called when hours change
      */
+    //% blockid=datetime_hourupdate
     //% block="hour changed" advanced=true
     //% weight=80
     export function onHourChanged(handler: () => void) {
@@ -583,6 +645,7 @@ namespace timeanddate {
     /**
      * Called when days change
      */
+    //% blockid=datetime_dayupdate
     //% block="day changed" advanced=true
     //% weight=75
     export function onDayChanged(handler: () => void) {
