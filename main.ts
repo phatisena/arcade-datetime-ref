@@ -288,7 +288,7 @@ namespace TimeAndDate {
         // Convert days to dd/ mm
         const ddmm = dayOfYearToMonthAndDay(daysFromStartOfYear, y) // current year, y, not start year
         
-        let kdid = 0
+        let kdid = DateTimeData.mainDateTime 
         if (kindid) {
             kdid = checkid(kindid)
         }
