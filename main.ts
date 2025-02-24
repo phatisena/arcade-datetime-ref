@@ -336,7 +336,7 @@ namespace TimeAndDate {
     //% hour.min=0 hour.max=23 hour.defl=13
     //% minute.min=0 minute.max=59 minute.defl=30
     //% second.min=0 second.max=59 second.defl=0
-    //% kind.shadow=datetime_kind
+    //% kindn.shadow=datetime_kind
     //% weight=90
     export function set24HourTime(hour: Hour, minute: Minute, second: Second, kindn: number=null) {
         hour = hour % 24
@@ -356,7 +356,7 @@ namespace TimeAndDate {
      */
     //% blockid=datetime_setdate
     //% block="set date to | month $month | / day $day | / year $year || to datetime kind $kindn"
-    //% kind.shadow=datetime_kind
+    //% kindn.shadow=datetime_kind
     //% month.min=1 month.max=12 month.defl=1
     //% day.min=1 day.max=31 day.defl=20
     //% year.min=2020 year.max=2050 year.defl=2022
@@ -383,7 +383,7 @@ namespace TimeAndDate {
     //% hour.min=1 hour.max=12 hour.defl=11
     //% minute.min=0 minute.max=59 minute.defl=30
     //% second.min=0 second.max=59 second.defl=0
-    //% kind.shadow=datetime_kind
+    //% kindn.shadow=datetime_kind
     //% inlineInputMode=inline
     //% weight=100
     export function setTime(hour: Hour, minute: Minute, second: Second, ampm: MornNight, kindn: number=null) {
@@ -460,7 +460,7 @@ namespace TimeAndDate {
      */
     //% blockid=datetime_alldatetimetogetinstatement
     //% block="time as numbers $hour:$minute.$second on $month/$day/$year || from datetime kind $kindn" advanced=true
-    //% kind.shadow=datetime_kind
+    //% kindn.shadow=datetime_kind
     //% handlerStatement
     //% draggableParameters="reporter"
     //% weight=100
@@ -476,7 +476,7 @@ namespace TimeAndDate {
      */
     //% blockid=datetime_time2format
     //% block="time as $format || from datetime kind $kindn"
-    //% kind.shadow=datetime_kind
+    //% kindn.shadow=datetime_kind
     //% weight=70
     export function time(format: TimeFormat, kindn: number=null): string {
         const cpuTime = cpuTimeInSeconds()
@@ -525,7 +525,7 @@ namespace TimeAndDate {
      */
     //% blockid=datetime_datemonth2format 
     //% block="month name as $format || from datetime kind $kindn"
-    //% kind.shadow=datetime_kind
+    //% kindn.shadow=datetime_kind
     //% weight=20
     export function nameMonth(format: MonthNameFormat, kindn: number=null): string {
         const cpuTime = cpuTimeInSeconds()
@@ -549,7 +549,7 @@ namespace TimeAndDate {
      */
     //% blockid=datetime_dateweek2format
     //% block="week name as $format || from datetime kind $kindn"
-    //% kind.shadow=datetime_kind
+    //% kindn.shadow=datetime_kind
     //% weight=20
     export function nameWeek(format: WeekNameFormat, kindn: number=null): string {
         const cpuTime = cpuTimeInSeconds()
@@ -577,7 +577,7 @@ namespace TimeAndDate {
      */
     //% blockid=datetime_date2format
     //% block="date as $format || from datetime kind $kindn"
-    //% kind.shadow=datetime_kind
+    //% kindn.shadow=datetime_kind
     //% weight=60
     export function date(format: DateFormat, kindn:number=null): string {
         const cpuTime = cpuTimeInSeconds()
@@ -611,7 +611,7 @@ namespace TimeAndDate {
      */
     //% blockid=datetime_dateandtime 
     //% block="date and time stamp || from datetime kind $kindn"
-    //% kind.shadow=datetime_kind
+    //% kindn.shadow=datetime_kind
     //% weight=50
     export function dateTime(kindn: number=null): string {
         const cpuTime = cpuTimeInSeconds()
