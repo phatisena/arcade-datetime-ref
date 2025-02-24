@@ -55,7 +55,7 @@ namespace TimeAndDate {
     game.onUpdateInterval(864, function() {
         // Only run about every 2 s;  Micro:bit uses a ticker with a 32kHz period, so the count should increase by about 65kHz for arcade or etc.
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime)
+        const t = timeFor(cpuTime, DateTimeData.mainDateTime)
         if (lastUpdateMinute != t.minute) {
             // New minute
             control.raiseEvent(TIME_AND_DATE_EVENT, TIME_AND_DATE_NEWMINUTE)
