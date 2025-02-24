@@ -291,6 +291,8 @@ namespace TimeAndDate {
         let kdid = DateTimeData.mainDateTime 
         if (kindid) {
             kdid = checkid(kindid)
+        } else {
+            kdid = checkid(DateTimeData.mainDateTime)
         }
         dtdata[kdid] = { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
         return dtdata[kdid]
