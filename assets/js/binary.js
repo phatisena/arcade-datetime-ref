@@ -1,5 +1,5 @@
-// meta={"simUrl":"https://trg-arcade.userpxt.io/v1.12.59/---simulator","cdnUrl":"https://cdn.makecode.com","version":"1.2.0","target":"arcade","targetVersion":"1.12.59","repo":"phatisena/arcade-datetime-ref"}
-// total=1272651 new=7.46% cached=86.85% other=5.69%
+// meta={"simUrl":"https://trg-arcade.userpxt.io/v1.12.59/---simulator","cdnUrl":"https://cdn.makecode.com","version":"1.2.1","target":"arcade","targetVersion":"1.12.59","repo":"phatisena/arcade-datetime-ref"}
+// total=1272857 new=7.47% cached=86.84% other=5.69%
 (function (ectx) {
 'use strict';
 const runtime = ectx.runtime;
@@ -433,7 +433,7 @@ const pxsim_pxtrt = pxsim.pxtrt;
 const pxsim_numops = pxsim.numops;
 
 
-function _main___P98846(s) {
+function _main___P104129(s) {
 let r0 = s.r0, step = s.pc;
 s.pc = -1;
 
@@ -831,28 +831,28 @@ switch (step) {
     s.callLocIdx = 62; s.pc = 36; return s.tmp_0;
   case 36:
     r0 = s.retval;
-    s.tmp_0 = DateTimeData_create__P97726_mk(s);
+    s.tmp_0 = DateTimeData_create__P102819_mk(s);
     s.callLocIdx = 63; s.pc = 37; return s.tmp_0;
   case 37:
     r0 = s.retval;
-    globals.mainDateTime___97734 = (r0);
+    globals.mainDateTime___102827 = (r0);
     r0 = pxsim_Array__mk();
-    globals.dtdata___97739 = (r0);
+    globals.dtdata___102832 = (r0);
     r0 = pxsim_Array__mk();
-    globals.dtid___97741 = (r0);
-    globals.curid___97744 = (0);
+    globals.dtid___102834 = (r0);
+    globals.curid___102837 = (0);
     s.tmp_0 = game_onUpdateInterval__P81579_mk(s);
     s.tmp_0.arg0 = 864;
-    s.tmp_0.arg1 = TimeAndDate_inline__P97766;
+    s.tmp_0.arg1 = TimeAndDate_inline__P102859;
     s.callLocIdx = 72; s.pc = 38; return s.tmp_0;
   case 38:
     r0 = s.retval;
-    globals.startYear___97838 = (0);
-    globals.timeToSetpoint___97840 = (0);
-    globals.cpuTimeAtSetpoint___97842 = (0);
-    globals.lastUpdateMinute___97779 = (100);
-    globals.lastUpdateHour___97797 = (100);
-    globals.lastUpdateDay___97813 = (100);
+    globals.startYear___102931 = (0);
+    globals.timeToSetpoint___102933 = (0);
+    globals.cpuTimeAtSetpoint___102935 = (0);
+    globals.lastUpdateMinute___102872 = (100);
+    globals.lastUpdateHour___102890 = (100);
+    globals.lastUpdateDay___102906 = (100);
     r0 = pxsim_Array__mk();
     s.tmp_0 = r0;
     r0 = pxsim_Array__push(s.tmp_0, 0);
@@ -869,18 +869,18 @@ switch (step) {
     r0 = pxsim_Array__push(s.tmp_0, 304);
     r0 = pxsim_Array__push(s.tmp_0, 334);
     r0 = pxsim_Array__push(s.tmp_0, 365);
-    globals.cdoy___97857 = (s.tmp_0);
+    globals.cdoy___102950 = (s.tmp_0);
     r0 = undefined;
     return leave(s, r0)
   default: oops()
 } } }
-_main___P98846.info = {"start":0,"length":0,"line":0,"column":0,"endLine":0,"endColumn":0,"fileName":"main.ts","functionName":"<main>","argumentNames":[]}
-_main___P98846.continuations = [  ]
+_main___P104129.info = {"start":0,"length":0,"line":0,"column":0,"endLine":0,"endColumn":0,"fileName":"main.ts","functionName":"<main>","argumentNames":[]}
+_main___P104129.continuations = [  ]
 
-function _main___P98846_mk(s) {
+function _main___P104129_mk(s) {
     checkStack(s.depth);
     return {
-        parent: s, fn: _main___P98846, depth: s.depth + 1,
+        parent: s, fn: _main___P104129, depth: s.depth + 1,
         pc: 0, retval: undefined, r0: undefined, overwrittenPC: false, lambdaArgs: null,
   tmp_0: undefined,
   tmp_1: undefined,
@@ -1419,7 +1419,7 @@ function gameOverConfig_inline__P83516_mk(s) {
 
 
 
-function TimeAndDate_inline__P97766(s) {
+function TimeAndDate_inline__P102859(s) {
 let r0 = s.r0, step = s.pc;
 s.pc = -1;
 
@@ -1429,23 +1429,23 @@ if (yieldSteps-- < 0 && maybeYield(s, step, r0) || runtime !== pxsim.runtime) re
 switch (step) {
   case 0:
 
-    s.cpuTime___97767 = undefined;
-    s.t___97771 = undefined;
-    s.tmp_0 = TimeAndDate_cpuTimeInSeconds__P97770_mk(s);
+    s.cpuTime___102860 = undefined;
+    s.t___102864 = undefined;
+    s.tmp_0 = TimeAndDate_cpuTimeInSeconds__P102863_mk(s);
     s.callLocIdx = 64; s.pc = 7; return s.tmp_0;
   case 7:
     r0 = s.retval;
-    s.cpuTime___97767 = (r0);
-    s.tmp_0 = TimeAndDate_timeFor__P97775_mk(s);
-    s.tmp_0.arg0 = s.cpuTime___97767;
-    s.tmp_0.arg1 = null;
+    s.cpuTime___102860 = (r0);
+    s.tmp_0 = TimeAndDate_timeFor__P102867_mk(s);
+    s.tmp_0.arg0 = s.cpuTime___102860;
+    s.tmp_0.arg1 = globals.mainDateTime___102827;
     s.callLocIdx = 65; s.pc = 8; return s.tmp_0;
   case 8:
     r0 = s.retval;
-    s.t___97771 = (r0);
-    s.tmp_1 = r0 = globals.lastUpdateMinute___97779;
+    s.t___102864 = (r0);
+    s.tmp_1 = r0 = globals.lastUpdateMinute___102872;
     s.tmp_3 = if_minute_1_mk(s);
-    s.tmp_3.arg0 = s.t___97771;
+    s.tmp_3.arg0 = s.t___102864;
     if (!s.tmp_3.arg0.vtable.iface) {
       s.retval = pxsim_pxtrt.mapGetByString(s.tmp_3.arg0, "minute");
     } else {
@@ -1463,7 +1463,7 @@ switch (step) {
     if (!r0) { step = 1; continue; }
     r0 = pxsim.control.raiseEvent(94, 1);
     s.tmp_0 = if_minute_1_mk(s);
-    s.tmp_0.arg0 = s.t___97771;
+    s.tmp_0.arg0 = s.t___102864;
     if (!s.tmp_0.arg0.vtable.iface) {
       s.retval = pxsim_pxtrt.mapGetByString(s.tmp_0.arg0, "minute");
     } else {
@@ -1474,12 +1474,12 @@ switch (step) {
     }
   case 10:
     r0 = s.retval;
-    globals.lastUpdateMinute___97779 = (r0);
+    globals.lastUpdateMinute___102872 = (r0);
   case 1:
   case 2:
-    s.tmp_1 = r0 = globals.lastUpdateHour___97797;
+    s.tmp_1 = r0 = globals.lastUpdateHour___102890;
     s.tmp_3 = if_hour_1_mk(s);
-    s.tmp_3.arg0 = s.t___97771;
+    s.tmp_3.arg0 = s.t___102864;
     if (!s.tmp_3.arg0.vtable.iface) {
       s.retval = pxsim_pxtrt.mapGetByString(s.tmp_3.arg0, "hour");
     } else {
@@ -1497,7 +1497,7 @@ switch (step) {
     if (!r0) { step = 3; continue; }
     r0 = pxsim.control.raiseEvent(94, 2);
     s.tmp_0 = if_hour_1_mk(s);
-    s.tmp_0.arg0 = s.t___97771;
+    s.tmp_0.arg0 = s.t___102864;
     if (!s.tmp_0.arg0.vtable.iface) {
       s.retval = pxsim_pxtrt.mapGetByString(s.tmp_0.arg0, "hour");
     } else {
@@ -1508,12 +1508,12 @@ switch (step) {
     }
   case 12:
     r0 = s.retval;
-    globals.lastUpdateHour___97797 = (r0);
+    globals.lastUpdateHour___102890 = (r0);
   case 3:
   case 4:
-    s.tmp_1 = r0 = globals.lastUpdateDay___97813;
+    s.tmp_1 = r0 = globals.lastUpdateDay___102906;
     s.tmp_3 = if_day_1_mk(s);
-    s.tmp_3.arg0 = s.t___97771;
+    s.tmp_3.arg0 = s.t___102864;
     if (!s.tmp_3.arg0.vtable.iface) {
       s.retval = pxsim_pxtrt.mapGetByString(s.tmp_3.arg0, "day");
     } else {
@@ -1531,7 +1531,7 @@ switch (step) {
     if (!r0) { step = 5; continue; }
     r0 = pxsim.control.raiseEvent(94, 3);
     s.tmp_0 = if_day_1_mk(s);
-    s.tmp_0.arg0 = s.t___97771;
+    s.tmp_0.arg0 = s.t___102864;
     if (!s.tmp_0.arg0.vtable.iface) {
       s.retval = pxsim_pxtrt.mapGetByString(s.tmp_0.arg0, "day");
     } else {
@@ -1542,33 +1542,33 @@ switch (step) {
     }
   case 14:
     r0 = s.retval;
-    globals.lastUpdateDay___97813 = (r0);
+    globals.lastUpdateDay___102906 = (r0);
   case 5:
   case 6:
     r0 = undefined;
     return leave(s, r0)
   default: oops()
 } } }
-TimeAndDate_inline__P97766.info = {"start":1385,"length":803,"line":54,"column":31,"endLine":73,"endColumn":5,"fileName":"main.ts","functionName":"inline","argumentNames":[]}
+TimeAndDate_inline__P102859.info = {"start":1385,"length":830,"line":54,"column":31,"endLine":73,"endColumn":5,"fileName":"main.ts","functionName":"inline","argumentNames":[]}
 
-function TimeAndDate_inline__P97766_mk(s) {
+function TimeAndDate_inline__P102859_mk(s) {
     checkStack(s.depth);
     return {
-        parent: s, fn: TimeAndDate_inline__P97766, depth: s.depth + 1,
+        parent: s, fn: TimeAndDate_inline__P102859, depth: s.depth + 1,
         pc: 0, retval: undefined, r0: undefined, overwrittenPC: false, lambdaArgs: null,
   tmp_0: undefined,
   tmp_1: undefined,
   tmp_2: undefined,
   tmp_3: undefined,
-  cpuTime___97767: undefined,
-  t___97771: undefined,
+  cpuTime___102860: undefined,
+  t___102864: undefined,
 } }
 
 
 
 
 
-function TimeAndDate_timeFor__P97775(s) {
+function TimeAndDate_timeFor__P102867(s) {
 let r0 = s.r0, step = s.pc;
 s.pc = -1;
 
@@ -1578,36 +1578,36 @@ if (yieldSteps-- < 0 && maybeYield(s, step, r0) || runtime !== pxsim.runtime) re
 switch (step) {
   case 0:
 
-    s.deltaTime___97935 = undefined;
-    s.sSinceStartOfYear___97939 = undefined;
-    s.y___97943 = undefined;
-    s.leap___97945 = undefined;
-    s.daysFromStartOfYear___98000 = undefined;
-    s.secondsSinceStartOfDay___98011 = undefined;
-    s.hoursFromStartOfDay___98019 = undefined;
-    s.secondsSinceStartOfHour___98026 = undefined;
-    s.minutesFromStartOfHour___98032 = undefined;
-    s.secondsSinceStartOfMinute___98036 = undefined;
-    s.ddmm___98039 = undefined;
-    s.kdid___98044 = undefined;
+    s.deltaTime___103028 = undefined;
+    s.sSinceStartOfYear___103032 = undefined;
+    s.y___103036 = undefined;
+    s.leap___103038 = undefined;
+    s.daysFromStartOfYear___103093 = undefined;
+    s.secondsSinceStartOfDay___103104 = undefined;
+    s.hoursFromStartOfDay___103112 = undefined;
+    s.secondsSinceStartOfHour___103119 = undefined;
+    s.minutesFromStartOfHour___103125 = undefined;
+    s.secondsSinceStartOfMinute___103129 = undefined;
+    s.ddmm___103132 = undefined;
+    s.kdid___103137 = undefined;
     if (s.lambdaArgs) {
       s.arg0 = (s.lambdaArgs[0]);
       s.arg1 = (s.lambdaArgs[1]);
       s.lambdaArgs = null;
     }
-    r0 = (s.arg0 - globals.cpuTimeAtSetpoint___97842);
-    s.deltaTime___97935 = (r0);
-    r0 = (globals.timeToSetpoint___97840 + s.deltaTime___97935);
-    s.sSinceStartOfYear___97939 = (r0);
-    s.y___97943 = (globals.startYear___97838);
-    s.tmp_0 = TimeAndDate_isLeapYear__P97859_mk(s);
-    s.tmp_0.arg0 = s.y___97943;
+    r0 = (s.arg0 - globals.cpuTimeAtSetpoint___102935);
+    s.deltaTime___103028 = (r0);
+    r0 = (globals.timeToSetpoint___102933 + s.deltaTime___103028);
+    s.sSinceStartOfYear___103032 = (r0);
+    s.y___103036 = (globals.startYear___102931);
+    s.tmp_0 = TimeAndDate_isLeapYear__P102952_mk(s);
+    s.tmp_0.arg0 = s.y___103036;
     s.callLocIdx = 74; s.pc = 11; return s.tmp_0;
   case 11:
     r0 = s.retval;
-    s.leap___97945 = (r0);
+    s.leap___103038 = (r0);
   case 1:
-    r0 = pxsim_numops_toBoolDecr(s.leap___97945);
+    r0 = pxsim_numops_toBoolDecr(s.leap___103038);
     s.tmp_1 = r0;
     r0 = pxsim_Boolean__bang(s.tmp_1);
     s.tmp_0 = r0;
@@ -1616,7 +1616,7 @@ switch (step) {
     r0 = s.tmp_0;
     { step = 3; continue; }
   case 2:
-    r0 = (s.sSinceStartOfYear___97939 > 31536000);
+    r0 = (s.sSinceStartOfYear___103032 > 31536000);
   case 3:
     // jmp value (already in r0)
     s.tmp_2 = r0;
@@ -1625,67 +1625,67 @@ switch (step) {
     r0 = s.tmp_2;
     { step = 5; continue; }
   case 4:
-    r0 = (s.sSinceStartOfYear___97939 > 31622400);
+    r0 = (s.sSinceStartOfYear___103032 > 31622400);
   case 5:
     // jmp value (already in r0)
     s.tmp_3 = r0;
     r0 = pxsim_numops_toBoolDecr(s.tmp_3);
     if (!r0) { step = 8; continue; }
-    r0 = pxsim_numops_toBoolDecr(s.leap___97945);
+    r0 = pxsim_numops_toBoolDecr(s.leap___103038);
     if (!r0) { step = 6; continue; }
-    r0 = (s.sSinceStartOfYear___97939 - 31622400);
-    s.sSinceStartOfYear___97939 = (r0);
+    r0 = (s.sSinceStartOfYear___103032 - 31622400);
+    s.sSinceStartOfYear___103032 = (r0);
     { step = 7; continue; }
   case 6:
-    r0 = (s.sSinceStartOfYear___97939 - 31536000);
-    s.sSinceStartOfYear___97939 = (r0);
+    r0 = (s.sSinceStartOfYear___103032 - 31536000);
+    s.sSinceStartOfYear___103032 = (r0);
   case 7:
-    r0 = (s.y___97943 + 1);
-    s.y___97943 = (r0);
-    s.tmp_0 = TimeAndDate_isLeapYear__P97859_mk(s);
-    s.tmp_0.arg0 = s.y___97943;
+    r0 = (s.y___103036 + 1);
+    s.y___103036 = (r0);
+    s.tmp_0 = TimeAndDate_isLeapYear__P102952_mk(s);
+    s.tmp_0.arg0 = s.y___103036;
     s.callLocIdx = 75; s.pc = 12; return s.tmp_0;
   case 12:
     r0 = s.retval;
-    s.leap___97945 = (r0);
+    s.leap___103038 = (r0);
     { step = 1; continue; }
   case 8:
-    r0 = pxsim.Math_.idiv(s.sSinceStartOfYear___97939, 86400);
+    r0 = pxsim.Math_.idiv(s.sSinceStartOfYear___103032, 86400);
     s.tmp_0 = r0;
     r0 = (s.tmp_0 + 1);
-    s.daysFromStartOfYear___98000 = (r0);
-    r0 = (s.sSinceStartOfYear___97939 % 86400);
-    s.secondsSinceStartOfDay___98011 = (r0);
-    r0 = pxsim.Math_.idiv(s.secondsSinceStartOfDay___98011, 3600);
-    s.hoursFromStartOfDay___98019 = (r0);
-    r0 = (s.secondsSinceStartOfDay___98011 % 3600);
-    s.secondsSinceStartOfHour___98026 = (r0);
-    r0 = pxsim.Math_.idiv(s.secondsSinceStartOfHour___98026, 60);
-    s.minutesFromStartOfHour___98032 = (r0);
-    r0 = (s.secondsSinceStartOfHour___98026 % 60);
-    s.secondsSinceStartOfMinute___98036 = (r0);
-    s.tmp_0 = TimeAndDate_dayOfYearToMonthAndDay__P97872_mk(s);
-    s.tmp_0.arg0 = s.daysFromStartOfYear___98000;
-    s.tmp_0.arg1 = s.y___97943;
+    s.daysFromStartOfYear___103093 = (r0);
+    r0 = (s.sSinceStartOfYear___103032 % 86400);
+    s.secondsSinceStartOfDay___103104 = (r0);
+    r0 = pxsim.Math_.idiv(s.secondsSinceStartOfDay___103104, 3600);
+    s.hoursFromStartOfDay___103112 = (r0);
+    r0 = (s.secondsSinceStartOfDay___103104 % 3600);
+    s.secondsSinceStartOfHour___103119 = (r0);
+    r0 = pxsim.Math_.idiv(s.secondsSinceStartOfHour___103119, 60);
+    s.minutesFromStartOfHour___103125 = (r0);
+    r0 = (s.secondsSinceStartOfHour___103119 % 60);
+    s.secondsSinceStartOfMinute___103129 = (r0);
+    s.tmp_0 = TimeAndDate_dayOfYearToMonthAndDay__P102965_mk(s);
+    s.tmp_0.arg0 = s.daysFromStartOfYear___103093;
+    s.tmp_0.arg1 = s.y___103036;
     s.callLocIdx = 76; s.pc = 13; return s.tmp_0;
   case 13:
     r0 = s.retval;
-    s.ddmm___98039 = (r0);
-    s.kdid___98044 = (0);
+    s.ddmm___103132 = (r0);
+    s.kdid___103137 = (0);
     r0 = pxsim_numops_toBoolDecr(s.arg1);
     if (!r0) { step = 9; continue; }
-    s.tmp_0 = TimeAndDate_checkid__P97745_mk(s);
+    s.tmp_0 = TimeAndDate_checkid__P102838_mk(s);
     s.tmp_0.arg0 = s.arg1;
     s.callLocIdx = 77; s.pc = 14; return s.tmp_0;
   case 14:
     r0 = s.retval;
-    s.kdid___98044 = (r0);
+    s.kdid___103137 = (r0);
   case 9:
   case 10:
     r0 = pxsim_pxtrt.mkMap();
     s.tmp_0 = r0;
     s.tmp_2 = if_month_1_mk(s);
-    s.tmp_2.arg0 = s.ddmm___98039;
+    s.tmp_2.arg0 = s.ddmm___103132;
     if (!s.tmp_2.arg0.vtable.iface) {
       s.retval = pxsim_pxtrt.mapGetByString(s.tmp_2.arg0, "month");
     } else {
@@ -1699,7 +1699,7 @@ switch (step) {
     s.tmp_1 = r0;
     r0 = pxsim_pxtrt.mapSetByString(s.tmp_0, "month", s.tmp_1);
     s.tmp_4 = if_day_1_mk(s);
-    s.tmp_4.arg0 = s.ddmm___98039;
+    s.tmp_4.arg0 = s.ddmm___103132;
     if (!s.tmp_4.arg0.vtable.iface) {
       s.retval = pxsim_pxtrt.mapGetByString(s.tmp_4.arg0, "day");
     } else {
@@ -1712,40 +1712,40 @@ switch (step) {
     r0 = s.retval;
     s.tmp_3 = r0;
     r0 = pxsim_pxtrt.mapSetByString(s.tmp_0, "day", s.tmp_3);
-    r0 = pxsim_pxtrt.mapSetByString(s.tmp_0, "year", s.y___97943);
-    r0 = pxsim_pxtrt.mapSetByString(s.tmp_0, "hour", s.hoursFromStartOfDay___98019);
-    r0 = pxsim_pxtrt.mapSetByString(s.tmp_0, "minute", s.minutesFromStartOfHour___98032);
-    r0 = pxsim_pxtrt.mapSetByString(s.tmp_0, "second", s.secondsSinceStartOfMinute___98036);
-    r0 = pxsim_pxtrt.mapSetByString(s.tmp_0, "dayOfYear", s.daysFromStartOfYear___98000);
-    r0 = pxsim_Array_.setAt(globals.dtdata___97739, s.kdid___98044, s.tmp_0);
-    r0 = pxsim_Array__getAt(globals.dtdata___97739, s.kdid___98044);
+    r0 = pxsim_pxtrt.mapSetByString(s.tmp_0, "year", s.y___103036);
+    r0 = pxsim_pxtrt.mapSetByString(s.tmp_0, "hour", s.hoursFromStartOfDay___103112);
+    r0 = pxsim_pxtrt.mapSetByString(s.tmp_0, "minute", s.minutesFromStartOfHour___103125);
+    r0 = pxsim_pxtrt.mapSetByString(s.tmp_0, "second", s.secondsSinceStartOfMinute___103129);
+    r0 = pxsim_pxtrt.mapSetByString(s.tmp_0, "dayOfYear", s.daysFromStartOfYear___103093);
+    r0 = pxsim_Array_.setAt(globals.dtdata___102832, s.kdid___103137, s.tmp_0);
+    r0 = pxsim_Array__getAt(globals.dtdata___102832, s.kdid___103137);
     return leave(s, r0)
   default: oops()
 } } }
-TimeAndDate_timeFor__P97775.info = {"start":7986,"length":1873,"line":257,"column":4,"endLine":296,"endColumn":5,"fileName":"main.ts","functionName":"timeFor","argumentNames":["cpuTime","kindid"]}
+TimeAndDate_timeFor__P102867.info = {"start":8013,"length":1873,"line":257,"column":4,"endLine":296,"endColumn":5,"fileName":"main.ts","functionName":"timeFor","argumentNames":["cpuTime","kindid"]}
 
-function TimeAndDate_timeFor__P97775_mk(s) {
+function TimeAndDate_timeFor__P102867_mk(s) {
     checkStack(s.depth);
     return {
-        parent: s, fn: TimeAndDate_timeFor__P97775, depth: s.depth + 1,
+        parent: s, fn: TimeAndDate_timeFor__P102867, depth: s.depth + 1,
         pc: 0, retval: undefined, r0: undefined, overwrittenPC: false, lambdaArgs: null,
   tmp_0: undefined,
   tmp_1: undefined,
   tmp_2: undefined,
   tmp_3: undefined,
   tmp_4: undefined,
-  deltaTime___97935: undefined,
-  sSinceStartOfYear___97939: undefined,
-  y___97943: undefined,
-  leap___97945: undefined,
-  daysFromStartOfYear___98000: undefined,
-  secondsSinceStartOfDay___98011: undefined,
-  hoursFromStartOfDay___98019: undefined,
-  secondsSinceStartOfHour___98026: undefined,
-  minutesFromStartOfHour___98032: undefined,
-  secondsSinceStartOfMinute___98036: undefined,
-  ddmm___98039: undefined,
-  kdid___98044: undefined,
+  deltaTime___103028: undefined,
+  sSinceStartOfYear___103032: undefined,
+  y___103036: undefined,
+  leap___103038: undefined,
+  daysFromStartOfYear___103093: undefined,
+  secondsSinceStartOfDay___103104: undefined,
+  hoursFromStartOfDay___103112: undefined,
+  secondsSinceStartOfHour___103119: undefined,
+  minutesFromStartOfHour___103125: undefined,
+  secondsSinceStartOfMinute___103129: undefined,
+  ddmm___103132: undefined,
+  kdid___103137: undefined,
   arg0: undefined,
   arg1: undefined,
 } }
@@ -1754,7 +1754,7 @@ function TimeAndDate_timeFor__P97775_mk(s) {
 
 
 
-function TimeAndDate_checkid__P97745(s) {
+function TimeAndDate_checkid__P102838(s) {
 let r0 = s.r0, step = s.pc;
 s.pc = -1;
 
@@ -1768,7 +1768,7 @@ switch (step) {
       s.arg0 = (s.lambdaArgs[0]);
       s.lambdaArgs = null;
     }
-    r0 = pxsim_Array_.indexOf(globals.dtid___97741, s.arg0, undefined);
+    r0 = pxsim_Array_.indexOf(globals.dtid___102834, s.arg0, undefined);
     s.tmp_1 = r0;
     r0 = (s.tmp_1 >= 0);
     s.tmp_0 = r0;
@@ -1778,7 +1778,9 @@ switch (step) {
     { step = 3; continue; }
   case 1:
   case 2:
-    r0 = pxsim_Array__push(globals.dtid___97741, globals.curid___97744);
+    r0 = (globals.curid___102837 + 1);
+    globals.curid___102837 = (r0);
+    r0 = pxsim_Array__push(globals.dtid___102834, globals.curid___102837);
     r0 = pxsim_pxtrt.mkMap();
     s.tmp_0 = r0;
     r0 = pxsim_pxtrt.mapSetByString(s.tmp_0, "month", 0);
@@ -1788,20 +1790,18 @@ switch (step) {
     r0 = pxsim_pxtrt.mapSetByString(s.tmp_0, "minute", 0);
     r0 = pxsim_pxtrt.mapSetByString(s.tmp_0, "second", 0);
     r0 = pxsim_pxtrt.mapSetByString(s.tmp_0, "dayOfYear", 0);
-    r0 = pxsim_Array__push(globals.dtdata___97739, s.tmp_0);
-    r0 = (globals.curid___97744 + 1);
-    globals.curid___97744 = (r0);
-    r0 = (globals.curid___97744 - 1);
+    r0 = pxsim_Array__push(globals.dtdata___102832, s.tmp_0);
+    r0 = (globals.curid___102837 - 1);
   case 3:
     return leave(s, r0)
   default: oops()
 } } }
-TimeAndDate_checkid__P97745.info = {"start":989,"length":258,"line":41,"column":4,"endLine":49,"endColumn":5,"fileName":"main.ts","functionName":"checkid","argumentNames":["id"]}
+TimeAndDate_checkid__P102838.info = {"start":989,"length":258,"line":41,"column":4,"endLine":49,"endColumn":5,"fileName":"main.ts","functionName":"checkid","argumentNames":["id"]}
 
-function TimeAndDate_checkid__P97745_mk(s) {
+function TimeAndDate_checkid__P102838_mk(s) {
     checkStack(s.depth);
     return {
-        parent: s, fn: TimeAndDate_checkid__P97745, depth: s.depth + 1,
+        parent: s, fn: TimeAndDate_checkid__P102838, depth: s.depth + 1,
         pc: 0, retval: undefined, r0: undefined, overwrittenPC: false, lambdaArgs: null,
   tmp_0: undefined,
   tmp_1: undefined,
@@ -1812,7 +1812,7 @@ function TimeAndDate_checkid__P97745_mk(s) {
 
 
 
-function TimeAndDate_dayOfYearToMonthAndDay__P97872(s) {
+function TimeAndDate_dayOfYearToMonthAndDay__P102965(s) {
 let r0 = s.r0, step = s.pc;
 s.pc = -1;
 
@@ -1822,13 +1822,13 @@ if (yieldSteps-- < 0 && maybeYield(s, step, r0) || runtime !== pxsim.runtime) re
 switch (step) {
   case 0:
 
-    s.i___97884 = undefined;
+    s.i___102977 = undefined;
     if (s.lambdaArgs) {
       s.arg0 = (s.lambdaArgs[0]);
       s.arg1 = (s.lambdaArgs[1]);
       s.lambdaArgs = null;
     }
-    s.tmp_1 = TimeAndDate_isLeapYear__P97859_mk(s);
+    s.tmp_1 = TimeAndDate_isLeapYear__P102952_mk(s);
     s.tmp_1.arg0 = s.arg1;
     s.callLocIdx = 73; s.pc = 12; return s.tmp_1;
   case 12:
@@ -1859,18 +1859,18 @@ switch (step) {
   case 4:
   case 5:
   case 6:
-    s.i___97884 = (1);
+    s.i___102977 = (1);
   case 7:
-    s.tmp_1 = r0 = s.i___97884;
-    r0 = pxsim_Array__length(globals.cdoy___97857);
+    s.tmp_1 = r0 = s.i___102977;
+    r0 = pxsim_Array__length(globals.cdoy___102950);
     s.tmp_2 = r0;
     r0 = (s.tmp_1 < s.tmp_2);
     s.tmp_0 = r0;
     r0 = pxsim_numops_toBoolDecr(s.tmp_0);
     if (!r0) { step = 10; continue; }
     s.tmp_4 = r0 = s.arg0;
-    s.tmp_6 = r0 = globals.cdoy___97857;
-    r0 = (s.i___97884 + 1);
+    s.tmp_6 = r0 = globals.cdoy___102950;
+    r0 = (s.i___102977 + 1);
     s.tmp_7 = r0;
     r0 = pxsim_Array__getAt(s.tmp_6, s.tmp_7);
     s.tmp_5 = r0;
@@ -1880,9 +1880,9 @@ switch (step) {
     if (!r0) { step = 8; continue; }
     r0 = pxsim_pxtrt.mkMap();
     s.tmp_8 = r0;
-    r0 = pxsim_pxtrt.mapSetByString(s.tmp_8, "month", s.i___97884);
+    r0 = pxsim_pxtrt.mapSetByString(s.tmp_8, "month", s.i___102977);
     s.tmp_10 = r0 = s.arg0;
-    r0 = pxsim_Array__getAt(globals.cdoy___97857, s.i___97884);
+    r0 = pxsim_Array__getAt(globals.cdoy___102950, s.i___102977);
     s.tmp_11 = r0;
     r0 = (s.tmp_10 - s.tmp_11);
     s.tmp_9 = r0;
@@ -1891,8 +1891,8 @@ switch (step) {
     { step = 11; continue; }
   case 8:
   case 9:
-    r0 = (s.i___97884 + 1);
-    s.i___97884 = (r0);
+    r0 = (s.i___102977 + 1);
+    s.i___102977 = (r0);
     { step = 7; continue; }
   case 10:
     r0 = pxsim_pxtrt.mkMap();
@@ -1904,12 +1904,12 @@ switch (step) {
     return leave(s, r0)
   default: oops()
 } } }
-TimeAndDate_dayOfYearToMonthAndDay__P97872.info = {"start":6949,"length":686,"line":231,"column":4,"endLine":249,"endColumn":5,"fileName":"main.ts","functionName":"dayOfYearToMonthAndDay","argumentNames":["d","y"]}
+TimeAndDate_dayOfYearToMonthAndDay__P102965.info = {"start":6976,"length":686,"line":231,"column":4,"endLine":249,"endColumn":5,"fileName":"main.ts","functionName":"dayOfYearToMonthAndDay","argumentNames":["d","y"]}
 
-function TimeAndDate_dayOfYearToMonthAndDay__P97872_mk(s) {
+function TimeAndDate_dayOfYearToMonthAndDay__P102965_mk(s) {
     checkStack(s.depth);
     return {
-        parent: s, fn: TimeAndDate_dayOfYearToMonthAndDay__P97872, depth: s.depth + 1,
+        parent: s, fn: TimeAndDate_dayOfYearToMonthAndDay__P102965, depth: s.depth + 1,
         pc: 0, retval: undefined, r0: undefined, overwrittenPC: false, lambdaArgs: null,
   tmp_0: undefined,
   tmp_1: undefined,
@@ -1923,7 +1923,7 @@ function TimeAndDate_dayOfYearToMonthAndDay__P97872_mk(s) {
   tmp_9: undefined,
   tmp_10: undefined,
   tmp_11: undefined,
-  i___97884: undefined,
+  i___102977: undefined,
   arg0: undefined,
   arg1: undefined,
 } }
@@ -1932,7 +1932,7 @@ function TimeAndDate_dayOfYearToMonthAndDay__P97872_mk(s) {
 
 
 
-function TimeAndDate_isLeapYear__P97859(s) {
+function TimeAndDate_isLeapYear__P102952(s) {
 let r0 = s.r0, step = s.pc;
 s.pc = -1;
 
@@ -1978,12 +1978,12 @@ switch (step) {
     return leave(s, r0)
   default: oops()
 } } }
-TimeAndDate_isLeapYear__P97859.info = {"start":6526,"length":353,"line":220,"column":4,"endLine":227,"endColumn":5,"fileName":"main.ts","functionName":"isLeapYear","argumentNames":["y"]}
+TimeAndDate_isLeapYear__P102952.info = {"start":6553,"length":353,"line":220,"column":4,"endLine":227,"endColumn":5,"fileName":"main.ts","functionName":"isLeapYear","argumentNames":["y"]}
 
-function TimeAndDate_isLeapYear__P97859_mk(s) {
+function TimeAndDate_isLeapYear__P102952_mk(s) {
     checkStack(s.depth);
     return {
-        parent: s, fn: TimeAndDate_isLeapYear__P97859, depth: s.depth + 1,
+        parent: s, fn: TimeAndDate_isLeapYear__P102952, depth: s.depth + 1,
         pc: 0, retval: undefined, r0: undefined, overwrittenPC: false, lambdaArgs: null,
   tmp_0: undefined,
   tmp_1: undefined,
@@ -1999,7 +1999,7 @@ function TimeAndDate_isLeapYear__P97859_mk(s) {
 
 
 
-function TimeAndDate_cpuTimeInSeconds__P97770(s) {
+function TimeAndDate_cpuTimeInSeconds__P102863(s) {
 let r0 = s.r0, step = s.pc;
 s.pc = -1;
 
@@ -2018,12 +2018,12 @@ switch (step) {
     return leave(s, r0)
   default: oops()
 } } }
-TimeAndDate_cpuTimeInSeconds__P97770.info = {"start":9908,"length":90,"line":299,"column":4,"endLine":301,"endColumn":5,"fileName":"main.ts","functionName":"cpuTimeInSeconds","argumentNames":[]}
+TimeAndDate_cpuTimeInSeconds__P102863.info = {"start":9935,"length":90,"line":299,"column":4,"endLine":301,"endColumn":5,"fileName":"main.ts","functionName":"cpuTimeInSeconds","argumentNames":[]}
 
-function TimeAndDate_cpuTimeInSeconds__P97770_mk(s) {
+function TimeAndDate_cpuTimeInSeconds__P102863_mk(s) {
     checkStack(s.depth);
     return {
-        parent: s, fn: TimeAndDate_cpuTimeInSeconds__P97770, depth: s.depth + 1,
+        parent: s, fn: TimeAndDate_cpuTimeInSeconds__P102863, depth: s.depth + 1,
         pc: 0, retval: undefined, r0: undefined, overwrittenPC: false, lambdaArgs: null,
   tmp_0: undefined,
   tmp_1: undefined,
@@ -3650,7 +3650,7 @@ function control_EventHandler_register_inline__P86622_mk(s) {
 
 
 
-function DateTimeData_create__P97726(s) {
+function DateTimeData_create__P102819(s) {
 let r0 = s.r0, step = s.pc;
 s.pc = -1;
 
@@ -3660,28 +3660,28 @@ if (yieldSteps-- < 0 && maybeYield(s, step, r0) || runtime !== pxsim.runtime) re
 switch (step) {
   case 0:
 
-    r0 = pxsim_numops_toBoolDecr(globals.kindid___97725);
+    r0 = pxsim_numops_toBoolDecr(globals.kindid___102818);
     s.tmp_1 = r0;
     r0 = pxsim_Boolean__bang(s.tmp_1);
     s.tmp_0 = r0;
     r0 = pxsim_numops_toBoolDecr(s.tmp_0);
     if (!r0) { step = 1; continue; }
-    globals.kindid___97725 = (0);
+    globals.kindid___102818 = (0);
   case 1:
   case 2:
-    s.tmp_0 = r0 = globals.kindid___97725;
+    s.tmp_0 = r0 = globals.kindid___102818;
     r0 = (s.tmp_0 + 1);
-    globals.kindid___97725 = (r0);
+    globals.kindid___102818 = (r0);
     r0 = s.tmp_0;
     return leave(s, r0)
   default: oops()
 } } }
-DateTimeData_create__P97726.info = {"start":56,"length":90,"line":5,"column":4,"endLine":8,"endColumn":5,"fileName":"main.ts","functionName":"create","argumentNames":[]}
+DateTimeData_create__P102819.info = {"start":56,"length":90,"line":5,"column":4,"endLine":8,"endColumn":5,"fileName":"main.ts","functionName":"create","argumentNames":[]}
 
-function DateTimeData_create__P97726_mk(s) {
+function DateTimeData_create__P102819_mk(s) {
     checkStack(s.depth);
     return {
-        parent: s, fn: DateTimeData_create__P97726, depth: s.depth + 1,
+        parent: s, fn: DateTimeData_create__P102819, depth: s.depth + 1,
         pc: 0, retval: undefined, r0: undefined, overwrittenPC: false, lambdaArgs: null,
   tmp_0: undefined,
   tmp_1: undefined,
@@ -43114,7 +43114,7 @@ const sprites_BaseSpriteSayRenderer__C80814_VT = mkVTable({
   },
 });
 
-const breakpoints = setupDebugger(1, ["mainDateTime___97734","lastUpdateMinute___97779","lastUpdateHour___97797","lastUpdateDay___97813","cpuTimeAtSetpoint___97842","timeToSetpoint___97840","startYear___97838","dtdata___97739","dtid___97741","curid___97744","cdoy___97857","kindid___97725"])
+const breakpoints = setupDebugger(1, ["mainDateTime___102827","lastUpdateMinute___102872","lastUpdateHour___102890","lastUpdateDay___102906","cpuTimeAtSetpoint___102935","timeToSetpoint___102933","startYear___102931","dtdata___102832","dtid___102834","curid___102837","cdoy___102950","kindid___102818"])
 
-return _main___P98846
+return _main___P104129
 })
