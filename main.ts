@@ -48,32 +48,29 @@ namespace TimeAndDate {
     //% kindPromptHint="enter your datetime here"
     export function _datetimekindshadow(arg: number) { return arg }
 
-    //% shim=TD_ID
     //% blockHidden=true
     //% blockId=datetime_dateshadow
     //% block="year $year / month $month / day $day"
     //% month.min=1 month.max=12 month.defl=1
     //% day.min=1 day.max=31 day.defl=20
     //% year.min=2020 year.max=2050 year.defl=2022
-    export function _datevalue(year:number,month:number,day:number) { return new dates(year,month,day) }
+    export function datevalue(year:number,month:number,day:number) { return new dates(year,month,day) }
 
-    //% shim=TD_ID
     //% blockHidden=true
     //% blockId=datetime_timeshadow
     //% block="$hour : $min . $sec"
     //% hour.min=0 hour.max=23 hour.defl=13
     //% min.min=0 min.max=59 min.defl=30
     //% sec.min=0 sec.max=59 sec.defl=0
-    export function _timevalue(hour: number, min: number, sec: number) { return new times(hour,min,sec) }
+    export function timevalue(hour: number, min: number, sec: number) { return new times(hour,min,sec) }
 
-    //% shim=TD_ID
     //% blockHidden=true
     //% blockId=datetime_halftimeshadow
     //% block="$hour : $min . $sec"
     //% hour.min=1 hour.max=12 hour.defl=11
     //% min.min=0 min.max=59 min.defl=30
     //% sec.min=0 sec.max=59 sec.defl=0
-    export function _halftimevalue(hour: number, min: number, sec: number) { return new times(hour,min,sec) }
+    export function halftimevalue(hour: number, min: number, sec: number) { return new times(hour,min,sec) }
 
 
 }
