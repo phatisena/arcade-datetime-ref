@@ -54,6 +54,7 @@ namespace TimeAndDate {
     //% month.min=1 month.max=12 month.defl=1
     //% day.min=1 day.max=31 day.defl=20
     //% year.min=2020 year.max=2050 year.defl=2022
+    //% deprecated=1
     export function datevalue(year:number,month:number,day:number) { return new dates(year,month,day) }
 
     //% blockHidden=true
@@ -62,6 +63,7 @@ namespace TimeAndDate {
     //% hour.min=0 hour.max=23 hour.defl=13
     //% min.min=0 min.max=59 min.defl=30
     //% sec.min=0 sec.max=59 sec.defl=0
+    //% deprecated=1
     export function timevalue(hour: number, min: number, sec: number) { return new times(hour,min,sec) }
 
     //% blockHidden=true
@@ -70,6 +72,7 @@ namespace TimeAndDate {
     //% hour.min=1 hour.max=12 hour.defl=11
     //% min.min=0 min.max=59 min.defl=30
     //% sec.min=0 sec.max=59 sec.defl=0
+    //% deprecated=1
     export function halftimevalue(hour: number, min: number, sec: number) { return new times(hour,min,sec) }
 
 
@@ -452,7 +455,7 @@ namespace TimeAndDate {
         } else if (ampm == MornNight.PM && hour != 12) {   // PMs other than 12 get shifted after 12:00 hours
             hour = hour + 12;
         }
-        set24HourTime(_timevalue(hour,minute,second), kindn, uval);
+        set24HourTime(timevalue(hour,minute,second), kindn, uval);
     }
 
     /**
