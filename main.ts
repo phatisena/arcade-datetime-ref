@@ -15,30 +15,38 @@ namespace DateTimeData {
 
 namespace TimeAndDate {
     
-    //%shim=KIND_GET
-    //%blockHidden=true
-    //%kindMemberName=Datetime
-    //%blockId=datetime_kind
-    //%block="$arg"
-    //%kindNamespace=DateTimeData
-    //%kindPromptHint="enter your datetime here"
+    //% shim=KIND_GET
+    //% blockHidden=true
+    //% kindMemberName=Datetime
+    //% blockId=datetime_kind
+    //% block="$arg"
+    //% kindNamespace=DateTimeData
+    //% kindPromptHint="enter your datetime here"
     export function _datetimekindshadow(arg: number) { return arg }
 
-    //%blockHidden=true
-    //%blockId=datetime_dateshadow
-    //%block="day $d / month $m / year $y"
-    //% m.min=1 mo.max=12 m.defl=1
+    //% blockHidden=true
+    //% blockId=datetime_dateshadow
+    //% block="year $y / month $m / day $d"
+    //% m.min=1 m.max=12 m.defl=1
     //% d.min=1 d.max=31 d.defl=20
     //% y.min=2020 y.max=2050 y.defl=2022
-    export function _dateshadow(d:number,m:number,y:number) { return [d,m,y] }
+    export function _dateshadow(y:number,m:number,d:number) { return [y,m,d] }
 
-    //%blockHidden=true
-    //%blockId=datetime_timeshadow
-    //%block="$hour : $min . $sec"
+    //% blockHidden=true
+    //% blockId=datetime_timeshadow
+    //% block="$hour : $min . $sec"
     //% hour.min=0 hour.max=23 hour.defl=13
     //% min.min=0 min.max=59 min.defl=30
     //% sec.min=0 sec.max=59 sec.defl=0
     export function _timeshadow(hour: number, min: number, sec: number) { return [hour, min, sec] }
+
+    //% blockHidden=true
+    //% blockId=datetime_halftimeshadow
+    //% block="$hour : $min . $sec"
+    //% hour.min=1 hour.max=12 hour.defl=11
+    //% min.min=0 min.max=59 min.defl=30
+    //% sec.min=0 sec.max=59 sec.defl=0
+    export function _halftimeshadow(hour: number, min: number, sec: number) { return [hour, min, sec] }
 
 }
 
@@ -387,7 +395,7 @@ namespace TimeAndDate {
     //$ dates.shadow=datetime_dateshadow
     //% weight=80
     export function setDate(dates: number[], kindn: number = null, uval: boolean = false) {
-        let month = dates[1], day = dates[0], year = dates[2]
+        let year = dates[0], month = dates[1], day = dates[2]
         month = month % 13
         day = day % 32
         const cpuTime = cpuTimeInSeconds()
@@ -405,15 +413,17 @@ namespace TimeAndDate {
      * @param ampm morning or night
      */
     //% block=datetime_settime
-    //% block="set time to |  $hour | : $minute | . $second | $ampm || to datetime kind $kindn"
+    //% block="set time to $times $ampm || to datetime kind $kindn"
     //% hour.min=1 hour.max=12 hour.defl=11
     //% minute.min=0 minute.max=59 minute.defl=30
     //% second.min=0 second.max=59 second.defl=0
     //% kindn.shadow=datetime_kind
+    //% times.shadow=datetime_halftimeshadow
     //% inlineInputMode=inline
     //% weight=100
-    export function setTime(hour: Hour, minute: Minute, second: Second, ampm: MornNight, kindn: number = null, uval: boolean = false) {
-        hour = hour % 13
+    export function setTime(times: number[], ampm: MornNight, kindn: number = null, uval: boolean = false) {
+        let hour = times[0], minute = times[1], second = times[2]
+        hour = (hour-1 % 12)+1
         // Adjust to 24-hour time format
         if (ampm == MornNight.AM && hour == 12) {  // 12am -> 0 hundred hours
             hour = 0;
