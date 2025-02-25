@@ -15,6 +15,18 @@ namespace DateTimeData {
 
 namespace TimeAndDate {
     
+    export interface dates {
+        day: number
+        month: number
+        year: number
+    }
+
+    export interface times {
+        hour: number
+        minute: number
+        second: number
+    }
+
     //% shim=KIND_GET
     //% blockHidden=true
     //% kindMemberName=Datetime
@@ -27,11 +39,11 @@ namespace TimeAndDate {
     //% shim=TD_ID
     //% blockHidden=true
     //% blockId=datetime_dateshadow
-    //% block="day $d / month $m / year $y"
+    //% block="year $y / month $m / day $d"
     //% m.min=1 mo.max=12 m.defl=1
     //% d.min=1 d.max=31 d.defl=20
     //% y.min=2020 y.max=2050 y.defl=2022
-    export function _dateshadow(d:number,m:number,y:number) { return [d,m,y] }
+    export function _dateshadow(y:number,m:number,d:number) { return {year: y, month: m, day: d} }
 
     //% shim=TD_ID
     //% blockHidden=true
@@ -40,7 +52,7 @@ namespace TimeAndDate {
     //% hour.min=0 hour.max=23 hour.defl=13
     //% min.min=0 min.max=59 min.defl=30
     //% sec.min=0 sec.max=59 sec.defl=0
-    export function _timeshadow(hour: number, min: number, sec: number) { return [hour, min, sec] }
+    export function _timeshadow(hour: number, min: number, sec: number) { return {hour: hour, minute: min, sec: sec} }
 
 }
 
@@ -357,14 +369,11 @@ namespace TimeAndDate {
      */
     //% blockid=datetime_set24hrtime
     //% block="set time from 24-hour time $times || to datetime kind $kindn"
-    //% hour.min=0 hour.max=23 hour.defl=13
-    //% minute.min=0 minute.max=59 minute.defl=30
-    //% second.min=0 second.max=59 second.defl=0
     //% times.shadow=datetime_timeshadow
     //% kindn.shadow=datetime_kind
     //% weight=90
-    export function set24HourTime(times: number[], kindn: number = null, uval: boolean = false) {
-        let hour = times[0], minute = times[1], second = times[2]
+    export function set24HourTime(times: times, kindn: number = null, uval: boolean = false) {
+        let hour = times.hour, minute = times.minute, second = times.second
         hour = hour % 24
         minute = minute % 60
         second = second % 60
@@ -424,7 +433,7 @@ namespace TimeAndDate {
         } else if (ampm == MornNight.PM && hour != 12) {   // PMs other than 12 get shifted after 12:00 hours
             hour = hour + 12;
         }
-        set24HourTime([hour, minute, second], kindn, uval);
+        set24HourTime({hour: hour,minute: minute,second: second}, kindn, uval);
     }
 
     /**
