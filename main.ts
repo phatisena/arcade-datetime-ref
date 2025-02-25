@@ -70,7 +70,7 @@ namespace TimeAndDate {
     //% blockHidden=true
     //% blockId=datetime_halftimeshadow
     //% block="$hour : $min . $sec"
-    //% hour.min=1 hour.max=12 hour.defl=13
+    //% hour.min=1 hour.max=12 hour.defl=11
     //% min.min=0 min.max=59 min.defl=30
     //% sec.min=0 sec.max=59 sec.defl=0
     export function _halftimevalue(hour: number, min: number, sec: number) { return new times(hour,min,sec) }
@@ -417,7 +417,7 @@ namespace TimeAndDate {
     //% month.min=1 month.max=12 month.defl=1
     //% day.min=1 day.max=31 day.defl=20
     //% year.min=2020 year.max=2050 year.defl=2022
-    //$ dates.shadow=datetime_dateshadow
+    //% dates.shadow=datetime_dateshadow
     //% weight=80
     export function setDate(dates: dates, kindn: number = null, uval: boolean = false) {
         let year = dates.year, month = dates.month, day = dates.year
