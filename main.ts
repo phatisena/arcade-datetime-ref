@@ -38,15 +38,17 @@ namespace TimeAndDate {
 namespace TimeAndDate {
 
     let dtdata: DateTime[] = [], dtid: number[] = [], curid = 0
+    dtid.push(0), dtdata.push({ month: 0, year: 0, day: 0, hour: 0, minute: 0, second: 0, dayOfYear: 0 })
 
     function checkid(id: number) {
-        if (dtid.indexOf(id) >= 0) {
-            return id
+        let uid = id + 1
+        if (dtid.indexOf(uid) < 0) {
+            curid++
+            dtid.push(curid)
+            dtdata.push({ month: 0, year: 0, day: 0, hour: 0, minute: 0, second: 0, dayOfYear: 0 })
+            return dtid.length - 1
         }
-        curid++
-        dtid.push(curid)
-        dtdata.push({month: 0,year: 0,day: 0,hour: 0,minute: 0,second: 0, dayOfYear: 0})
-        return curid-1
+        return dtid.indexOf(uid)
     }
 
     /* 
@@ -159,7 +161,7 @@ namespace TimeAndDate {
     type SecondsCount = uint32 // Seconds since start of start year
     type Weekday = uint8 // Weekday code. 0=Sunday, 1=Monday, etc.
 
-    interface DateTime {
+    export interface DateTime {
         month: Month   // 1-12 Month of year
         day: Day   // 1-31 / Day of month
         year: Year  // Assumed to be 2020 or later
@@ -169,7 +171,7 @@ namespace TimeAndDate {
         dayOfYear: DayOfYear  // 1-366
     }
 
-    interface MonthDay {
+    export interface MonthDay {
         month: Month   // 1-12 Month of year
         day: Day   // 1-31 / Day of month
     }
@@ -255,7 +257,7 @@ namespace TimeAndDate {
         return (((dateToDayOfYear(m, d, y) - 1) * 24 + hh) * 60 + mm) * 60 + ss
     }
 
-    function timeFor(cpuTime: SecondsCount, kindid: number = null): DateTime {
+    function timeFor(cpuTime: SecondsCount, kindid: number = null, uval: boolean=false): DateTime {
         const deltaTime = cpuTime - cpuTimeAtSetpoint
         let sSinceStartOfYear = timeToSetpoint + deltaTime
         // Find elapsed years by counting up from start year and subtracting off complete years
@@ -289,11 +291,12 @@ namespace TimeAndDate {
         const ddmm = dayOfYearToMonthAndDay(daysFromStartOfYear, y) // current year, y, not start year
         
         let kdid = DateTimeData.mainDateTime 
-        if (kindid) {
+        if (kindid)
             kdid = checkid(kindid)
-        } else {
+        else
             kdid = checkid(DateTimeData.mainDateTime)
-        }
+        
+        if (uval) kdid = checkid(-1)
         dtdata[kdid] = { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
         return dtdata[kdid]
     }
@@ -340,12 +343,12 @@ namespace TimeAndDate {
     //% second.min=0 second.max=59 second.defl=0
     //% kindn.shadow=datetime_kind
     //% weight=90
-    export function set24HourTime(hour: Hour, minute: Minute, second: Second, kindn: number=null) {
+    export function set24HourTime(hour: Hour, minute: Minute, second: Second, kindn: number = null, uval: boolean = false) {
         hour = hour % 24
         minute = minute % 60
         second = second % 60
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime, kindn)
+        const t = timeFor(cpuTime, kindn, uval)
         cpuTimeAtSetpoint = cpuTime
         timeToSetpoint = secondsSoFarForYear(t.month, t.day, t.year, hour, minute, second)
     }
@@ -363,11 +366,11 @@ namespace TimeAndDate {
     //% day.min=1 day.max=31 day.defl=20
     //% year.min=2020 year.max=2050 year.defl=2022
     //% weight=80
-    export function setDate(month: Month, day: Day, year: Year, kindn: number=null) {
+    export function setDate(month: Month, day: Day, year: Year, kindn: number = null, uval: boolean = false) {
         month = month % 13
         day = day % 32
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime, kindn)
+        const t = timeFor(cpuTime, kindn, uval)
         startYear = year
         cpuTimeAtSetpoint = cpuTime
         timeToSetpoint = secondsSoFarForYear(month, day, startYear, t.hour, t.minute, t.second)
@@ -388,7 +391,7 @@ namespace TimeAndDate {
     //% kindn.shadow=datetime_kind
     //% inlineInputMode=inline
     //% weight=100
-    export function setTime(hour: Hour, minute: Minute, second: Second, ampm: MornNight, kindn: number=null) {
+    export function setTime(hour: Hour, minute: Minute, second: Second, ampm: MornNight, kindn: number = null, uval: boolean = false) {
         hour = hour % 13
         // Adjust to 24-hour time format
         if (ampm == MornNight.AM && hour == 12) {  // 12am -> 0 hundred hours
@@ -396,7 +399,7 @@ namespace TimeAndDate {
         } else if (ampm == MornNight.PM && hour != 12) {   // PMs other than 12 get shifted after 12:00 hours
             hour = hour + 12;
         }
-        set24HourTime(hour, minute, second, kindn);
+        set24HourTime(hour, minute, second, kindn, uval);
     }
 
     /**
@@ -480,9 +483,9 @@ namespace TimeAndDate {
     //% block="time as $format || from datetime kind $kindn"
     //% kindn.shadow=datetime_kind
     //% weight=70
-    export function time(format: TimeFormat, kindn: number=null): string {
+    export function time(format: TimeFormat, kindn: number = null, uval: boolean = false): string {
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime, kindn)
+        const t = timeFor(cpuTime, kindn, uval)
 
         // Handle 24-hour format with helper
         if (format == TimeFormat.HHMMSS24hr)
@@ -529,9 +532,9 @@ namespace TimeAndDate {
     //% block="month name as $format || from datetime kind $kindn"
     //% kindn.shadow=datetime_kind
     //% weight=20
-    export function nameMonth(format: MonthNameFormat, kindn: number=null): string {
+    export function nameMonth(format: MonthNameFormat, kindn: number = null, uval: boolean = false): string {
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime,kindn)
+        const t = timeFor(cpuTime,kindn,uval)
         const dtIdx = monthName[0].indexOf(t.month.toString())
         const dtName = monthName[1][dtIdx]
         switch (format) {
@@ -553,9 +556,9 @@ namespace TimeAndDate {
     //% block="week name as $format || from datetime kind $kindn"
     //% kindn.shadow=datetime_kind
     //% weight=20
-    export function nameWeek(format: WeekNameFormat, kindn: number=null): string {
+    export function nameWeek(format: WeekNameFormat, kindn: number = null, uval: boolean = false): string {
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime)
+        const t = timeFor(cpuTime,kindn,uval)
         const w = dateToDayOfWeek(t.month, t.day, t.year)
         const dtIdx = weekName[0].indexOf(w.toString())
         const dtName = weekName[1][dtIdx]
@@ -581,9 +584,9 @@ namespace TimeAndDate {
     //% block="date as $format || from datetime kind $kindn"
     //% kindn.shadow=datetime_kind
     //% weight=60
-    export function date(format: DateFormat, kindn:number=null): string {
+    export function date(format: DateFormat, kindn: number = null, uval: boolean = false): string {
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime, kindn)
+        const t = timeFor(cpuTime, kindn, uval)
         const w = dateToDayOfWeek(t.month, t.day, t.year)
         const dtIdx = [monthName[0].indexOf(t.month.toString()),weekName[0].indexOf(w.toString())]
         const dtName = [monthName[1][dtIdx[0]],weekName[1][dtIdx[1]]]
@@ -615,9 +618,9 @@ namespace TimeAndDate {
     //% block="date and time stamp || from datetime kind $kindn"
     //% kindn.shadow=datetime_kind
     //% weight=50
-    export function dateTime(kindn: number=null): string {
+    export function dateTime(kindn: number = null, uval: boolean = false): string {
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime, kindn)
+        const t = timeFor(cpuTime, kindn, uval)
         return fullYear(t) + " " + fullTime(t)
     }
 
