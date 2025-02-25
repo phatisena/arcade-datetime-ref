@@ -24,14 +24,16 @@ namespace TimeAndDate {
     //% kindPromptHint="enter your datetime here"
     export function _datetimekindshadow(arg: number) { return arg }
 
+    //% shim=TD_ID
     //% blockHidden=true
     //% blockId=datetime_dateshadow
-    //% block="year $y / month $m / day $d"
-    //% m.min=1 m.max=12 m.defl=1
+    //% block="day $d / month $m / year $y"
+    //% m.min=1 mo.max=12 m.defl=1
     //% d.min=1 d.max=31 d.defl=20
     //% y.min=2020 y.max=2050 y.defl=2022
-    export function _dateshadow(y:number,m:number,d:number) { return [y,m,d] }
+    export function _dateshadow(d:number,m:number,y:number) { return [d,m,y] }
 
+    //% shim=TD_ID
     //% blockHidden=true
     //% blockId=datetime_timeshadow
     //% block="$hour : $min . $sec"
@@ -39,14 +41,6 @@ namespace TimeAndDate {
     //% min.min=0 min.max=59 min.defl=30
     //% sec.min=0 sec.max=59 sec.defl=0
     export function _timeshadow(hour: number, min: number, sec: number) { return [hour, min, sec] }
-
-    //% blockHidden=true
-    //% blockId=datetime_halftimeshadow
-    //% block="$hour : $min . $sec"
-    //% hour.min=1 hour.max=12 hour.defl=11
-    //% min.min=0 min.max=59 min.defl=30
-    //% sec.min=0 sec.max=59 sec.defl=0
-    export function _halftimeshadow(hour: number, min: number, sec: number) { return [hour, min, sec] }
 
 }
 
