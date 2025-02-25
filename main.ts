@@ -186,7 +186,7 @@ namespace TimeAndDate {
     type SecondsCount = uint32 // Seconds since start of start year
     type Weekday = uint8 // Weekday code. 0=Sunday, 1=Monday, etc.
 
-    export interface DateTime {
+    interface DateTime {
         month: Month   // 1-12 Month of year
         day: Day   // 1-31 / Day of month
         year: Year  // Assumed to be 2020 or later
@@ -196,7 +196,7 @@ namespace TimeAndDate {
         dayOfYear: DayOfYear  // 1-366
     }
 
-    export interface MonthDay {
+    interface MonthDay {
         month: Month   // 1-12 Month of year
         day: Day   // 1-31 / Day of month
     }
