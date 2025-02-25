@@ -16,9 +16,9 @@ namespace DateTimeData {
 namespace TimeAndDate {
     
     export class dates {
-        day: number
-        month: number
-        year: number
+        public day: number
+        public month: number
+        public year: number
 
         constructor(y:number,m:number,d:number) {
             this.day = d
@@ -28,9 +28,9 @@ namespace TimeAndDate {
     }
 
     export class times {
-        hour: number
-        minute: number
-        second: number
+        public hour: number
+        public minute: number
+        public second: number
 
         constructor (h:number,m:number,s:number) {
             this.hour = h
