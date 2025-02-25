@@ -419,8 +419,8 @@ namespace TimeAndDate {
     //% year.min=2020 year.max=2050 year.defl=2022
     //$ dates.shadow=datetime_dateshadow
     //% weight=80
-    export function setDate(dates: number[], kindn: number = null, uval: boolean = false) {
-        let year = dates[0], month = dates[1], day = dates[2]
+    export function setDate(dates: dates, kindn: number = null, uval: boolean = false) {
+        let year = dates.year, month = dates.month, day = dates.year
         month = month % 13
         day = day % 32
         const cpuTime = cpuTimeInSeconds()
@@ -446,8 +446,8 @@ namespace TimeAndDate {
     //% times.shadow=datetime_halftimeshadow
     //% inlineInputMode=inline
     //% weight=100
-    export function setTime(times: number[], ampm: MornNight, kindn: number = null, uval: boolean = false) {
-        let hour = times[0], minute = times[1], second = times[2]
+    export function setTime(times: times, ampm: MornNight, kindn: number = null, uval: boolean = false) {
+        let hour = times.hour, minute = times.minute, second = times.second
         hour = (hour-1 % 12)+1
         // Adjust to 24-hour time format
         if (ampm == MornNight.AM && hour == 12) {  // 12am -> 0 hundred hours
@@ -455,7 +455,7 @@ namespace TimeAndDate {
         } else if (ampm == MornNight.PM && hour != 12) {   // PMs other than 12 get shifted after 12:00 hours
             hour = hour + 12;
         }
-        set24HourTime({hour: hour,minute: minute,second: second}, kindn, uval);
+        set24HourTime(_timevalue(hour,minute,second), kindn, uval);
     }
 
     /**
