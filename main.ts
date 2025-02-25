@@ -16,12 +16,29 @@ namespace DateTimeData {
 namespace TimeAndDate {
     
     //%shim=KIND_GET
+    //%blockHidden=true
     //%kindMemberName=Datetime
     //%blockId=datetime_kind
     //%block="$arg"
     //%kindNamespace=DateTimeData
     //%kindPromptHint="enter your datetime here"
     export function _datetimekindshadow(arg: number) { return arg }
+
+    //%blockHidden=true
+    //%blockId=datetime_dateshadow
+    //%block="day $d / month $m / year $y"
+    //% m.min=1 mo.max=12 m.defl=1
+    //% d.min=1 d.max=31 d.defl=20
+    //% y.min=2020 y.max=2050 y.defl=2022
+    export function _dateshadow(d:number,m:number,y:number) { return [d,m,y] }
+
+    //%blockHidden=true
+    //%blockId=datetime_timeshadow
+    //%block="$hour : $min . $sec"
+    //% hour.min=0 hour.max=23 hour.defl=13
+    //% min.min=0 min.max=59 min.defl=30
+    //% sec.min=0 sec.max=59 sec.defl=0
+    export function _timeshadow(hour: number, min: number, sec: number) { return [hour, min, sec] }
 
 }
 
@@ -337,13 +354,15 @@ namespace TimeAndDate {
      * @param second the second (0-59)
      */
     //% blockid=datetime_set24hrtime
-    //% block="set time from 24-hour time |  $hour | : $minute | . $second || to datetime kind $kindn"
+    //% block="set time from 24-hour time $times || to datetime kind $kindn"
     //% hour.min=0 hour.max=23 hour.defl=13
     //% minute.min=0 minute.max=59 minute.defl=30
     //% second.min=0 second.max=59 second.defl=0
+    //% times.shadow=datetime_timeshadow
     //% kindn.shadow=datetime_kind
     //% weight=90
-    export function set24HourTime(hour: Hour, minute: Minute, second: Second, kindn: number = null, uval: boolean = false) {
+    export function set24HourTime(times: number[], kindn: number = null, uval: boolean = false) {
+        let hour = times[0], minute = times[1], second = times[2]
         hour = hour % 24
         minute = minute % 60
         second = second % 60
@@ -360,13 +379,15 @@ namespace TimeAndDate {
      * @param the year 2020-2050
      */
     //% blockid=datetime_setdate
-    //% block="set date to | month $month | / day $day | / year $year || to datetime kind $kindn"
+    //% block="set date to $dates || to datetime kind $kindn"
     //% kindn.shadow=datetime_kind
     //% month.min=1 month.max=12 month.defl=1
     //% day.min=1 day.max=31 day.defl=20
     //% year.min=2020 year.max=2050 year.defl=2022
+    //$ dates.shadow=datetime_dateshadow
     //% weight=80
-    export function setDate(month: Month, day: Day, year: Year, kindn: number = null, uval: boolean = false) {
+    export function setDate(dates: number[], kindn: number = null, uval: boolean = false) {
+        let month = dates[1], day = dates[0], year = dates[2]
         month = month % 13
         day = day % 32
         const cpuTime = cpuTimeInSeconds()
@@ -399,7 +420,7 @@ namespace TimeAndDate {
         } else if (ampm == MornNight.PM && hour != 12) {   // PMs other than 12 get shifted after 12:00 hours
             hour = hour + 12;
         }
-        set24HourTime(hour, minute, second, kindn, uval);
+        set24HourTime([hour, minute, second], kindn, uval);
     }
 
     /**
