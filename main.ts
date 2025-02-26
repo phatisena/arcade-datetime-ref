@@ -121,9 +121,9 @@ namespace DateTime {
 
     export enum YearFormat {
         //% block="national year"
-        NY,
+        NY = 0,
         //% block="buddhist year"
-        BHY,
+        BHY = 543,
     }
     
     export enum MornNight {
