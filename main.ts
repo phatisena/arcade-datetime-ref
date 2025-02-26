@@ -71,6 +71,7 @@ namespace DateTime {
     dtid.push(0), dtdata.push({ month: 0, year: 0, day: 0, hour: 0, minute: 0, second: 0, dayOfYear: 0 })
 
     function checkid(id: number) {
+        if (id < 0) return 0
         let uid = id + 1
         if (dtid.indexOf(uid) < 0) {
             curid++
@@ -118,6 +119,13 @@ namespace DateTime {
         ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
         ]
 
+    export enum YearFormat {
+        //% block="national year"
+        NY,
+        //% block="buddhist year"
+        BHY,
+    }
+    
     export enum MornNight {
         //% block="am"
         AM,
@@ -324,9 +332,9 @@ namespace DateTime {
         if (kindid)
             kdid = checkid(kindid)
         else
-            kdid = checkid(DateTimeData.mainDateTime)
+            kdid = checkid(-1)
         
-        if (uval) kdid = checkid(-1)
+        if (uval) return { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
         dtdata[kdid] = { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
         return dtdata[kdid]
     }
