@@ -13,31 +13,11 @@ namespace DateTimeData {
 
 }
 
-namespace TimeAndDate {
+namespace DateTime {
     
-    export class dates {
-        public day: number
-        public month: number
-        public year: number
+    export class dates { constructor(public year:number,public month:number,public day:number) {} }
 
-        constructor(y:number,m:number,d:number) {
-            this.day = d
-            this.month = m
-            this.year = y
-        }
-    }
-
-    export class times {
-        public hour: number
-        public minute: number
-        public second: number
-
-        constructor (h:number,m:number,s:number) {
-            this.hour = h
-            this.minute = m
-            this.second = s
-        }
-    }
+    export class times { constructor(public hour:number,public minute:number,public second:number) {} }
 
     //% shim=KIND_GET
     //% blockHidden=true
@@ -62,7 +42,7 @@ namespace TimeAndDate {
     //% hour.min=0 hour.max=23 hour.defl=13
     //% min.min=0 min.max=59 min.defl=30
     //% sec.min=0 sec.max=59 sec.defl=0
-    export function timevalue(hour: number, min: number, sec: number) { return new times(hour,min,sec) }
+    export function time24value(hour: number, min: number, sec: number) { return new times(hour,min,sec) }
 
     //% blockHidden=true
     //% blockId=datetime_halftimeshadow
@@ -70,7 +50,7 @@ namespace TimeAndDate {
     //% hour.min=1 hour.max=12 hour.defl=11
     //% min.min=0 min.max=59 min.defl=30
     //% sec.min=0 sec.max=59 sec.defl=0
-    export function halftimevalue(hour: number, min: number, sec: number) { return new times(hour,min,sec) }
+    export function time12value(hour: number, min: number, sec: number) { return new times(hour,min,sec) }
 
 
 }
@@ -85,7 +65,7 @@ namespace TimeAndDate {
  */
 //% block="Time and Date"
 //% color="#AA278D"  icon="\uf017"
-namespace TimeAndDate {
+namespace DateTime {
 
     let dtdata: DateTime[] = [], dtid: number[] = [], curid = 0
     dtid.push(0), dtdata.push({ month: 0, year: 0, day: 0, hour: 0, minute: 0, second: 0, dayOfYear: 0 })
@@ -443,7 +423,7 @@ namespace TimeAndDate {
     //% times.shadow=datetime_halftimeshadow
     //% inlineInputMode=inline
     //% weight=100
-    export function setTime(times: times, ampm: MornNight, kindn: number = null, uval: boolean = false) {
+    export function set12HourTime(times: times, ampm: MornNight, kindn: number = null, uval: boolean = false) {
         let hour = times.hour, minute = times.minute, second = times.second
         hour = (hour-1 % 12)+1
         // Adjust to 24-hour time format
@@ -452,7 +432,7 @@ namespace TimeAndDate {
         } else if (ampm == MornNight.PM && hour != 12) {   // PMs other than 12 get shifted after 12:00 hours
             hour = hour + 12;
         }
-        set24HourTime(timevalue(hour,minute,second), kindn, uval);
+        set24HourTime(time24value(hour,minute,second), kindn, uval);
     }
 
     /**
