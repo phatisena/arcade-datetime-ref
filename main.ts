@@ -15,7 +15,7 @@ namespace DateTimeData {
 
 namespace DateTime {
     
-    export class dates { constructor(public year:number,public month:number,public day:number) {} }
+    export class dates { constructor(public month:number,public day:number,public year:number) {} }
 
     export class times { constructor(public hour:number,public minute:number,public second:number) {} }
 
@@ -30,11 +30,11 @@ namespace DateTime {
 
     //% blockHidden=true
     //% blockId=datetime_dateshadow
-    //% block="year $year / month $month / day $day"
+    //% block="month $month / day $day / year $year"
     //% month.min=1 month.max=12 month.defl=1
     //% day.min=1 day.max=31 day.defl=20
     //% year.min=2020 year.max=2050 year.defl=2022
-    export function datevalue(year:number,month:number,day:number) { return new dates(year,month,day) }
+    export function datevalue(month:number,day:number,year:number) { return new dates(month,day,year) }
 
     //% blockHidden=true
     //% blockId=datetime_timeshadow
@@ -292,7 +292,7 @@ namespace DateTime {
     function secondsSoFarForYear(m: Month, d: Day, y: Year, hh: Hour, mm: Minute, ss: Second): SecondsCount {
         // ((((Complete Days * 24hrs/ day)+complete hours)*60min/ hr)+complete minutes)* 60s/ min + complete seconds
         // Yay Horner's Rule!:
-        return (((dateToDayOfYear(m, d, y) - 1) * 24 + hh) * 60 + mm) * 60 + ss
+        return (((dateToDayOfYear(datevalue(m, d, y)) - 1) * 24 + hh) * 60 + mm) * 60 + ss
     }
 
     function timeFor(cpuTime: SecondsCount, kindid: number = null, uval: boolean=false): DateTime {
@@ -375,7 +375,7 @@ namespace DateTime {
      * @param second the second (0-59)
      */
     //% blockid=datetime_set24hrtime
-    //% block="set time from 24-hour time $times || to datetime kind $kindn"
+    //% block="set time from 24-hour time $times|| to datetime kind $kindn"
     //% times.shadow=datetime_timeshadow
     //% kindn.shadow=datetime_kind
     //% weight=90
@@ -397,7 +397,7 @@ namespace DateTime {
      * @param the year 2020-2050
      */
     //% blockid=datetime_setdate
-    //% block="set date to $dates || to datetime kind $kindn"
+    //% block="set date to $dates|| to datetime kind $kindn"
     //% kindn.shadow=datetime_kind
     //% month.min=1 month.max=12 month.defl=1
     //% day.min=1 day.max=31 day.defl=20
@@ -405,7 +405,7 @@ namespace DateTime {
     //% dates.shadow=datetime_dateshadow
     //% weight=80
     export function setDate(dates: dates, kindn: number = null, uval: boolean = false) {
-        let year = dates.year, month = dates.month, day = dates.year
+        let year = dates.year, month = dates.month, day = dates.day
         month = month % 13
         day = day % 32
         const cpuTime = cpuTimeInSeconds()
@@ -423,7 +423,7 @@ namespace DateTime {
      * @param ampm morning or night
      */
     //% block=datetime_settime
-    //% block="set time to $times $ampm || to datetime kind $kindn"
+    //% block="set time to $times $ampm|| to datetime kind $kindn"
     //% hour.min=1 hour.max=12 hour.defl=11
     //% minute.min=0 minute.max=59 minute.defl=30
     //% second.min=0 second.max=59 second.defl=0
@@ -449,7 +449,7 @@ namespace DateTime {
      * @param unit the unit of time
      */
     //% blockid=datetime_advancesetdatetime
-    //% block="advance time/date by | $amount | $unit" advanced=true
+    //% block="advance time/date by $amount $unit" advanced=true
     //% weight=50
     export function advanceBy(amount: number, unit: TimeUnit) {
         const units = [0, 1, 60 * 1, 60 * 60 * 1, 24 * 60 * 60 * 1]
@@ -466,13 +466,12 @@ namespace DateTime {
      *  0=>Monday, 1=>Tuesday, etc.
      */
     //% blockid=datetime_date2dayweek
-    //% block="day of week for month $month / day $day / year $year" advanced=true
-    //% month.min=1 month.max=12 month.defl=1
-    //% day.min=1 day.max=31 day.defl=20
-    //% year.min=2020 year.max=2050 year.defl=2022
+    //% block="day of week for $dates" advanced=true
+    //% dates.shadow=datetime_dateshadow
     //% weight=40
-    export function dateToDayOfWeek(month: Month, day: Day, year: Year): Weekday {
-        let doy = dateToDayOfYear(month, day, year)
+    export function dateToDayOfWeek(dates: dates): Weekday {
+        let month = dates.month, day = dates.day, year = dates.year
+        let doy = dateToDayOfYear(datevalue(month, day, year))
         // Gauss's Algorithm for Jan 1: https://en.wikipedia.org/wiki/Determination_of_the_day_of_the_week
         // R(1+5R(A-1,4)+4R(A-1,100)+6R(A-1,400),7)    
         let jan1 = ((1 + 5 * ((year - 1) % 4) + 4 * ((year - 1) % 100) + 6 * ((year - 1) % 400)) % 7)
@@ -485,12 +484,11 @@ namespace DateTime {
      *  Jan 1 = 1, Jan 2=2, Dec 31 is 365 or 366
      */
     //% blockid=datetime_date2dayyear
-    //% block="day of year for month $month / day $day / year $year" advanced=true
-    //% month.min=1 month.max=12 month.defl=1
-    //% day.min=1 day.max=31 day.defl=20
-    //% year.min=2020 year.max=2050 year.defl=2022
+    //% block="day of year for $dates" advanced=true
+    //% dates.shadow=datetime_dateshadow
     //% weight=30
-    export function dateToDayOfYear(month: Month, day: Day, year: Year): DayOfYear {
+    export function dateToDayOfYear(dates: dates): DayOfYear {
+        let year = dates.year, month = dates.month, day = dates.day
         month = Math.constrain(month, 1, 12)
         // Assumes a valid date
         let dayOfYear = cdoy[month] + day
@@ -521,7 +519,7 @@ namespace DateTime {
      * @param format the format to use
      */
     //% blockid=datetime_time2format
-    //% block="time as $format || from datetime kind $kindn"
+    //% block="time as $format|| from datetime kind $kindn"
     //% kindn.shadow=datetime_kind
     //% weight=70
     export function time(format: TimeFormat, kindn: number = null, uval: boolean = false): string {
@@ -570,7 +568,7 @@ namespace DateTime {
      * @param format the format to use
      */
     //% blockid=datetime_datemonth2format 
-    //% block="month name as $format || from datetime kind $kindn"
+    //% block="month name as $format|| from datetime kind $kindn"
     //% kindn.shadow=datetime_kind
     //% weight=20
     export function nameMonth(format: MonthNameFormat, kindn: number = null, uval: boolean = false): string {
@@ -594,13 +592,13 @@ namespace DateTime {
      * @param format the format to use
      */
     //% blockid=datetime_dateweek2format
-    //% block="week name as $format || from datetime kind $kindn"
+    //% block="week name as $format|| from datetime kind $kindn"
     //% kindn.shadow=datetime_kind
     //% weight=20
     export function nameWeek(format: WeekNameFormat, kindn: number = null, uval: boolean = false): string {
         const cpuTime = cpuTimeInSeconds()
         const t = timeFor(cpuTime,kindn,uval)
-        const w = dateToDayOfWeek(t.month, t.day, t.year)
+        const w = dateToDayOfWeek(datevalue(t.month, t.day, t.year))
         const dtIdx = weekName[0].indexOf(w.toString())
         const dtName = weekName[1][dtIdx]
         switch (format) {
@@ -622,13 +620,13 @@ namespace DateTime {
      * @param format the format to use
      */
     //% blockid=datetime_date2format
-    //% block="date as $format for year in $y || from datetime kind $kindn"
+    //% block="date as $format for year in $y|| from datetime kind $kindn"
     //% kindn.shadow=datetime_kind
     //% weight=60
     export function date(format: DateFormat, y: YearFormat=0, kindn: number = null, uval: boolean = false): string {
         const cpuTime = cpuTimeInSeconds()
         const t = timeFor(cpuTime, kindn, uval)
-        const w = dateToDayOfWeek(t.month, t.day, t.year)
+        const w = dateToDayOfWeek(datevalue(t.month, t.day, t.year))
         const dtIdx = [monthName[0].indexOf(t.month.toString()),weekName[0].indexOf(w.toString())]
         const dtName = [monthName[1][dtIdx[0]],weekName[1][dtIdx[1]]]
         switch (format) {
@@ -657,7 +655,7 @@ namespace DateTime {
      * Current date and time in a timestamp format (YYYY-MM-DD HH:MM.SS).  
      */
     //% blockid=datetime_dateandtime 
-    //% block="date and time stamp for year in $y || from datetime kind $kindn"
+    //% block="date and time stamp for year in $y|| from datetime kind $kindn"
     //% kindn.shadow=datetime_kind
     //% weight=50
     export function dateTime(y: YearFormat=0, kindn: number = null, uval: boolean = false): string {
