@@ -360,8 +360,8 @@ namespace DateTime {
     }
 
     // Full year: yyyy-mm-dd
-    function fullYear(t: DateTime): string {
-        return leftZeroPadTo(t.year, 4) + "-" + leftZeroPadTo(t.month, 2) + "-" + leftZeroPadTo(t.day, 2)
+    function fullYear(t: DateTime, y: YearFormat=0): string {
+        return leftZeroPadTo(t.year + y, 4) + "-" + leftZeroPadTo(t.month, 2) + "-" + leftZeroPadTo(t.day, 2)
     }
 
 
@@ -622,10 +622,10 @@ namespace DateTime {
      * @param format the format to use
      */
     //% blockid=datetime_date2format
-    //% block="date as $format || from datetime kind $kindn"
+    //% block="date as $format for year in $y || from datetime kind $kindn"
     //% kindn.shadow=datetime_kind
     //% weight=60
-    export function date(format: DateFormat, kindn: number = null, uval: boolean = false): string {
+    export function date(format: DateFormat, y: YearFormat=0, kindn: number = null, uval: boolean = false): string {
         const cpuTime = cpuTimeInSeconds()
         const t = timeFor(cpuTime, kindn, uval)
         const w = dateToDayOfWeek(t.month, t.day, t.year)
@@ -642,10 +642,11 @@ namespace DateTime {
                 return t.month + "/" + t.day
                 break
             case DateFormat.MDY:
+                t.year += y
                 return t.month + "/" + t.day + "/" + t.year
                 break
             case DateFormat.YYYY_MM_DD:
-                return fullYear(t)
+                return fullYear(t,y)
                 break
 
         }
@@ -656,13 +657,13 @@ namespace DateTime {
      * Current date and time in a timestamp format (YYYY-MM-DD HH:MM.SS).  
      */
     //% blockid=datetime_dateandtime 
-    //% block="date and time stamp || from datetime kind $kindn"
+    //% block="date and time stamp for year in $y || from datetime kind $kindn"
     //% kindn.shadow=datetime_kind
     //% weight=50
-    export function dateTime(kindn: number = null, uval: boolean = false): string {
+    export function dateTime(y: YearFormat=0, kindn: number = null, uval: boolean = false): string {
         const cpuTime = cpuTimeInSeconds()
         const t = timeFor(cpuTime, kindn, uval)
-        return fullYear(t) + " " + fullTime(t)
+        return fullYear(t,y) + " " + fullTime(t)
     }
 
     /**
