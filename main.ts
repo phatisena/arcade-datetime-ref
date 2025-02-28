@@ -67,19 +67,18 @@ namespace DateTime {
 //% color="#AA278D"  icon="\uf017"
 namespace DateTime {
 
-    let dtdata: DateTime[] = [], dtid: number[] = [], curid = 0
-    dtid.push(0), dtdata.push({ month: 0, year: 0, day: 0, hour: 0, minute: 0, second: 0, dayOfYear: 0 })
+    let dtdatedata: DateTime[] = [], dttimedata: number[] = [], dtid: number[] = [], curid = 0
+    dtid.push(0), dtdatedata.push({ month: 0, year: 0, day: 0, hour: 0, minute: 0, second: 0, dayOfYear: 0 })
 
     function checkid(id: number) {
         if (id < 0) return 0
-        let uid = id + 1
-        if (dtid.indexOf(uid) < 0) {
-            curid++
-            dtid.push(curid+1)
-            dtdata.push({ month: 0, year: 0, day: 0, hour: 0, minute: 0, second: 0, dayOfYear: 0 })
-            return dtid.length - 1
-        }
-        return dtid.indexOf(uid)
+        id++
+        if (dtid.indexOf(id) >= 0) return dtid.indexOf(id)
+        curid++
+        dtid.push(curid)
+        dttimedata.push(0)
+        dtdatedata.push({ month: 0, year: 0, day: 0, hour: 0, minute: 0, second: 0, dayOfYear: 0 })
+        return dtid.length - 1
     }
 
     /* 
@@ -329,14 +328,12 @@ namespace DateTime {
         const ddmm = dayOfYearToMonthAndDay(daysFromStartOfYear, y) // current year, y, not start year
         
         let kdid = DateTimeData.mainDateTime 
-        if (kindid)
-            kdid = checkid(kindid)
-        else
-            kdid = checkid(-1)
-        
+        if (kindid) kdid = checkid(kindid);
+        else kdid = checkid(kdid);
+        dttimedata[kdid] = secondsSinceStartOfHour
         if (uval) return { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
-        dtdata[kdid] = { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
-        return dtdata[kdid]
+        dtdatedata[kdid] = { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
+        return dtdatedata[kdid]
     }
 
     //% shim=timeanddate::cpuTimeInSeconds
@@ -721,3 +718,5 @@ namespace DateTime {
 
     // ********************************************************
 }
+
+DateTime.setDate(DateTime.datevalue(1, 20, 2022),DateTimeData.mainDateTime)
