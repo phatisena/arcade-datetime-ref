@@ -75,7 +75,7 @@ namespace DateTime {
         let uid = id + 1
         if (dtid.indexOf(uid) < 0) {
             curid++
-            dtid.push(curid)
+            dtid.push(curid+1)
             dtdata.push({ month: 0, year: 0, day: 0, hour: 0, minute: 0, second: 0, dayOfYear: 0 })
             return dtid.length - 1
         }
