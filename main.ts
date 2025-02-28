@@ -500,12 +500,12 @@ namespace DateTime {
      * Get all values of time as numbers.  
      */
     //% blockid=datetime_alldatetimetogetinstatement
-    //% block="time as numbers $hour:$minute.$second on $month/$day/$year || from datetime kind $kindn" advanced=true
+    //% block="time from kind $kindn as numbers $hour:$minute.$second on $month/$day/$year" advanced=true
     //% kindn.shadow=datetime_kind
     //% handlerStatement
     //% draggableParameters="reporter"
     //% weight=100
-    export function numericTime(handler: (hour: Hour, minute: Minute, second: Second, month: Month, day: Day, year: Year) => void, kindn: number=null) {
+    export function numericTime(kindn: number, handler: (hour: Hour, minute: Minute, second: Second, month: Month, day: Day, year: Year) => void) {
         const cpuTime = cpuTimeInSeconds()
         const t = timeFor(cpuTime, kindn)
         handler(t.hour, t.minute, t.second, t.month, t.day, t.year)
