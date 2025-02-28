@@ -500,7 +500,7 @@ namespace DateTime {
      * Get all values of time as numbers.  
      */
     //% blockid=datetime_alldatetimetogetinstatement
-    //% block="time from kind $kindn as numbers $hour:$minute.$second on $month/$day/$year" advanced=true
+    //% block="date and time from kind $kindn as numbers $hour:$minute.$second on $month/$day/$year" advanced=true
     //% kindn.shadow=datetime_kind
     //% handlerStatement
     //% draggableParameters="reporter"
