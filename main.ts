@@ -296,7 +296,7 @@ namespace DateTime {
 
     function timeFor(cpuTime: SecondsCount, kindid: number = null, uval: boolean=false): DateTime {
         const deltaTime = cpuTime - cpuTimeAtSetpoint
-        let sSinceStartOfYear = timeToSetpoint + deltaTime
+        let sSinceStartOfYear = timeToSetpoint + deltaTime, uSince = sSinceStartOfYear
         // Find elapsed years by counting up from start year and subtracting off complete years
         let y = startYear
         let leap = isLeapYear(y)
@@ -330,9 +330,9 @@ namespace DateTime {
         let kdid = DateTimeData.mainDateTime 
         if (kindid) kdid = checkid(kindid);
         else kdid = checkid(kdid);
-        dttimedata[kdid] = secondsSinceStartOfHour
-        if (uval) return { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
+        dttimedata[kdid] = uSince
         dtdatedata[kdid] = { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
+        if (uval) return { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
         return dtdatedata[kdid]
     }
 
