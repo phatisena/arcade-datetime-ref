@@ -719,4 +719,3 @@ namespace DateTime {
     // ********************************************************
 }
 
-DateTime.setDate(DateTime.datevalue(1, 20, 2022),DateTimeData.mainDateTime)
