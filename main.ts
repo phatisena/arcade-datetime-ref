@@ -330,9 +330,9 @@ namespace DateTime {
         let kdid = DateTimeData.mainDateTime 
         if (kindid) kdid = checkid(kindid);
         else kdid = checkid(kdid);
+        if (uval) return { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
         dttimedata[kdid] = uSince
         dtdatedata[kdid] = { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
-        if (uval) return { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
         return dtdatedata[kdid]
     }
 
