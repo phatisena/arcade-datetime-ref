@@ -544,6 +544,27 @@ namespace DateTime {
         return dayOfYear
     }
 
+    export function dateAsTableList(idate:dates): number[] {
+        let dateCountI = dateToDaySince(idate)
+        let dateI = dateFor(dateCountI)
+        while (dateI.month == idate.month || dateToDayOfWeek(dateI) !== 0) {
+            dateCountI--
+            dateI = dateFor(dateCountI)
+        }
+        let tableDate: number[] = []
+        let tableCol = 7, tableRow = 6
+        for (let iin = 0; iin < tableCol*tableRow;iin++) {
+            const icol = iin % tableCol, irow = Math.floor(iin / tableRow)
+            dateI = dateFor(dateCountI+iin)
+            if (idate.month === dateI.month) {
+                tableDate.push(dateI.day)
+            } else {
+                tableDate.push(-1)
+            }
+        }
+        return tableDate
+    }
+
     /**
      * Get all values of time as numbers.  
      */
@@ -767,4 +788,4 @@ namespace DateTime {
     // ********************************************************
 }
 
-game.splash(DateTime.dateToDaySince(DateTime.datevalue(3,5,2025)))
+
