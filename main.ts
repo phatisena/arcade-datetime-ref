@@ -301,10 +301,10 @@ namespace DateTime {
         return (((dateToDayOfYear(datevalue(m, d, y)) - 1) * 24 + hh) * 60 + mm) * 60 + ss
     }
 
-    function dateFor(dateCount: SecondsCount): Date {   
+    function dateFor(dateCount: SecondsCount): DateTime {   
         // Find elapsed years by counting up from start year and subtracting off complete years
         let startDateCount = dateCount
-        let y = 0
+        let y = 1
         let leap = isLeapYear(y)
         while ((!leap && startDateCount > 365) || (startDateCount > 366)) {
             if (leap) {
@@ -323,7 +323,7 @@ namespace DateTime {
         // Convert days to dd/ mm
         const ddmm = dayOfYearToMonthAndDay(daysFromStartOfYear, y) // current year, y, not start year
 
-        return { month: ddmm.month, day: ddmm.day, year: y, dayOfYear: daysFromStartOfYear }
+        return { month: ddmm.month, day: ddmm.day, year: y, hour: 0, minute: 0, second: 0, dayOfYear: daysFromStartOfYear }
     }
 
     function timeFor(cpuTime: SecondsCount, kindid: number = null, uval: boolean=false): DateTime {
@@ -499,10 +499,9 @@ namespace DateTime {
     export function dateToDaySince(dates: dates): SecondsCount {
         let uyear = dates.year, umonth = dates.month, uday = dates.day
         umonth = Math.constrain(umonth, 1, 12)
-        
         let daySince = 0
-        for (let iiii = 1;iiii < uyear;iiii++) daySince += dateToDayOfYear(datevalue(12,31,iiii))+1;
-        daySince += dateToDayOfYear(datevalue(umonth,uday,uyear))+1
+        for (let iiii = 1;iiii < uyear;iiii++) daySince += dateToDayOfYear(datevalue(12,31,iiii));
+        daySince += dateToDayOfYear(datevalue(umonth,uday,uyear))
         return daySince
     }
 
@@ -548,26 +547,24 @@ namespace DateTime {
      * create calendar table from date
      */
     //% blockid=datetime_datetable
-    //% block="table date as $dates"
-    //% dates.shadow=datetime_dateshadow
+    //% block="calendar table as $idate"
+    //% idate.shadow=datetime_dateshadow
     //% weight=15
     export function dateAsTableList(idate:dates): number[] {
-        let dateCountI = dateToDaySince(idate)
+        let dateJ = new dates(idate.month,idate.day,idate.year)
+        let dateCountI = dateToDaySince(datevalue(dateJ.month,dateJ.day,dateJ.year))
         let dateI = dateFor(dateCountI)
-        while (dateI.month == idate.month || dateToDayOfWeek(dateI) !== 0) {
+        let dateWeek = dateToDayOfWeek(datevalue(dateI.month,dateI.day,dateI.year))
+        while (dateI.month == dateJ.month || (dateI.month != dateJ.month && dateWeek != 0)) {
             dateCountI--
             dateI = dateFor(dateCountI)
+            dateWeek = dateToDayOfWeek(datevalue(dateI.month,dateI.day,dateI.year))
         }
         let tableDate: number[] = []
         let tableCol = 7, tableRow = 6
         for (let iin = 0; iin < tableCol*tableRow;iin++) {
-            const icol = iin % tableCol, irow = Math.floor(iin / tableRow)
             dateI = dateFor(dateCountI+iin)
-            if (idate.month === dateI.month) {
-                tableDate.push(dateI.day)
-            } else {
-                tableDate.push(-1)
-            }
+            tableDate.push((dateJ.month == dateI.month) ? dateI.day : 0)
         }
         return tableDate
     }
@@ -794,5 +791,4 @@ namespace DateTime {
 
     // ********************************************************
 }
-
 
