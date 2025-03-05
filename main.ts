@@ -544,6 +544,13 @@ namespace DateTime {
         return dayOfYear
     }
 
+    /**
+     * create calendar table from date
+     */
+    //% blockid=datetime_datetable
+    //% block="table date as $dates"
+    //% dates.shadow=datetime_dateshadow
+    //% weight=15
     export function dateAsTableList(idate:dates): number[] {
         let dateCountI = dateToDaySince(idate)
         let dateI = dateFor(dateCountI)
