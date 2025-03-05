@@ -326,16 +326,6 @@ namespace DateTime {
         return { month: ddmm.month, day: ddmm.day, year: y, dayOfYear: daysFromStartOfYear }
     }
 
-    export function dateToDaySince(dates: dates): SecondsCount {
-        let uyear = dates.year, umonth = dates.month, uday = dates.day
-        umonth = Math.constrain(umonth, 1, 12)
-        
-        let daySince = 0
-        for (let iiii = 1;iiii < uyear;iiii++) daySince += dateToDayOfYear(datevalue(12,31,iiii))+1;
-        daySince += dateToDayOfYear(datevalue(umonth,uday,uyear))+1
-        return daySince
-    }
-
     function timeFor(cpuTime: SecondsCount, kindid: number = null, uval: boolean=false): DateTime {
         const deltaTime = cpuTime - cpuTimeAtSetpoint
         let sSinceStartOfYear = timeToSetpoint + deltaTime, uSince = sSinceStartOfYear
@@ -499,6 +489,22 @@ namespace DateTime {
             timeToSetpoint += amount * units[unit]
     }
 
+    /**
+     * get day since from date
+     */
+    //% blockid=datetime_datetodaysince
+    //% block="day since as $dates"
+    //% dates.shadow=datetime_dateshadow
+    //% weight=20
+    export function dateToDaySince(dates: dates): SecondsCount {
+        let uyear = dates.year, umonth = dates.month, uday = dates.day
+        umonth = Math.constrain(umonth, 1, 12)
+        
+        let daySince = 0
+        for (let iiii = 1;iiii < uyear;iiii++) daySince += dateToDayOfYear(datevalue(12,31,iiii))+1;
+        daySince += dateToDayOfYear(datevalue(umonth,uday,uyear))+1
+        return daySince
+    }
 
     /**
      * Get the Day of the week  
