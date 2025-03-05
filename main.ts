@@ -533,28 +533,29 @@ namespace DateTime {
      * from current date
      */
     //% blockid=datetime_date2age
-    //% block="get age of $dates|| from $kindn"
-    //% dates.shadow=datetime_dateshadow
+    //% block="get age of $datei|| from $kindn"
+    //% datei.shadow=datetime_dateshadow
     //% kindn.shadow=datetime_kind
     //% weight=30
-    export function yourDateToAge(dates: dates, kindn: number=null): DayOfYear {
-        let year = dates.year, month = dates.month, day = dates.day
-        month = Math.constrain(month, 1, 12)
+    export function yourDateToAge(datei: dates, kindn: number=null): DayOfYear {
+        const uudate = new dates(datei.month,datei.day,datei.year)
+        uudate.month = Math.constrain(uudate.month, 1, 12)
         let uid = DateTimeData.mainDateTime
         if (kindn) uid = checkid(kindn);
         else uid = checkid(uid);
-        let udate = dtdatedata[uid]
+        const udate = dtdatedata[uid]
         let agecount = 0
         let ageidx = 0
-        for (let ii = 1;ii < year;ii++) ageidx += dateToDayOfYear(datevalue(12,31,ii));
-        ageidx += dateToDayOfYear(datevalue(month, day, year))
+        for (let ii = 1;ii < uudate.year;ii++) ageidx += dateToDayOfYear(datevalue(12,31,ii))+1;
+        ageidx += dateToDayOfYear(datevalue(uudate.month, uudate.day, uudate.year))+1
         let maxage = 0
-        for (let ii = 1;ii < udate.year;ii++) maxage += dateToDayOfYear(datevalue(12,31,ii));
-        maxage += dateToDayOfYear(datevalue(udate.month, udate.day, udate.year))
-        while (ageidx < maxage) {
-            const curdate = timeFor((ageidx*(24*60*60)), null, true)
-            agecount += (curdate.month == month && curdate.day == day) ? 1 : 0;
+        for (let ii = 1;ii < udate.year;ii++) maxage += dateToDayOfYear(datevalue(12,31,ii))+1;
+        maxage += dateToDayOfYear(datevalue(udate.month, udate.day, udate.year))+1
+        while (true) {
+            const curdate = dateFor(ageidx)
+            agecount += (curdate.month == uudate.month && curdate.day == uudate.day) ? 1 : 0;
             ageidx++
+            if (ageidx >= maxage) break;
         }
         return agecount
     }
@@ -782,5 +783,5 @@ namespace DateTime {
     // ********************************************************
 }
 
-DateTime.setDate(DateTime.datevalue(3, 5, 2025))
-game.splash(DateTime.yourDateToAge(DateTime.datevalue(1, 20, 2022)))
+DateTime.setDate(DateTime.datevalue(3, 5, 2025),1)
+game.splash(DateTime.yourDateToAge(DateTime.datevalue(1, 20, 2022),1))
