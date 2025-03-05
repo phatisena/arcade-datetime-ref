@@ -208,6 +208,13 @@ namespace DateTime {
         dayOfYear: DayOfYear  // 1-366
     }
 
+    interface Date {
+        month: Month   // 1-12 Month of year
+        day: Day   // 1-31 / Day of month
+        year: Year  // Assumed to be 2020 or later
+        dayOfYear: DayOfYear  // 1-366
+    }
+
     interface MonthDay {
         month: Month   // 1-12 Month of year
         day: Day   // 1-31 / Day of month
@@ -292,6 +299,31 @@ namespace DateTime {
         // ((((Complete Days * 24hrs/ day)+complete hours)*60min/ hr)+complete minutes)* 60s/ min + complete seconds
         // Yay Horner's Rule!:
         return (((dateToDayOfYear(datevalue(m, d, y)) - 1) * 24 + hh) * 60 + mm) * 60 + ss
+    }
+
+    function dateFor(dateCount: SecondsCount): Date {   
+        // Find elapsed years by counting up from start year and subtracting off complete years
+        let startDateCount = dateCount
+        let y = 0
+        let leap = isLeapYear(y)
+        while ((!leap && startDateCount > 365) || (startDateCount > 366)) {
+            if (leap) {
+                startDateCount -= 366
+            } else {
+                startDateCount -= 365
+            }
+            y += 1
+            leap = isLeapYear(y)
+        }
+
+        // sSinceStartOfYear and leap are now for "y", not "year".  Don't use "year"! Use "y"
+        // Find elapsed days
+        const daysFromStartOfYear = startDateCount + 1  // +1 offset for 1/1 being day 
+
+        // Convert days to dd/ mm
+        const ddmm = dayOfYearToMonthAndDay(daysFromStartOfYear, y) // current year, y, not start year
+
+        return { month: ddmm.month, day: ddmm.day, year: y, dayOfYear: daysFromStartOfYear }
     }
 
     function timeFor(cpuTime: SecondsCount, kindid: number = null, uval: boolean=false): DateTime {
