@@ -328,10 +328,10 @@ namespace DateTime {
 
     export function dateToDaySince(dates: dates): SecondsCount {
         let uyear = dates.year, umonth = dates.month, uday = dates.day
-        umonth = Math.constrain(month, 1, 12)
+        umonth = Math.constrain(umonth, 1, 12)
         
         let daySince = 0
-        for (let iiii = 1;iiii < uyear;iiii++) daySince += dateToDayOfYear(datevalueu(12,31,iiii))+1;
+        for (let iiii = 1;iiii < uyear;iiii++) daySince += dateToDayOfYear(datevalue(12,31,iiii))+1;
         daySince += dateToDayOfYear(datevalue(umonth,uday,uyear))+1
         return daySince
     }
@@ -761,4 +761,4 @@ namespace DateTime {
     // ********************************************************
 }
 
-
+game.splash(DateTime.dateToDaySince(DateTime.datevalue(3,5,2025)))
