@@ -310,9 +310,9 @@ namespace DateTime {
         return (((dateToDayOfYear(datevalue(m, d, y)) - 1) * 24 + hh) * 60 + mm) * 60 + ss
     }
 
-    function dateFor(dateCount: SecondsCount): Date {   
+    function dateSinceFor(dateSince: SecondsCount): Date {   
         // Find elapsed years by counting up from start year and subtracting off complete years
-        let startDateCount = dateCount
+        let startDateCount = dateSince
         let y = 1
         let leap = isLeapYear(y)
         while ((!leap && startDateCount > 365) || (startDateCount > 366)) {
@@ -337,7 +337,7 @@ namespace DateTime {
 
     function timeFor(cpuTime: SecondsCount, kindid: number = null, uval: boolean=false): DateTime {
         const deltaTime = cpuTime - cpuTimeAtSetpoint
-        let sSinceStartOfYear = timeToSetpoint + deltaTime, uSince = sSinceStartOfYear
+        let sSinceStartOfYear = timeToSetpoint + deltaTime
         // Find elapsed years by counting up from start year and subtracting off complete years
         let y = startYear
         let leap = isLeapYear(y)
@@ -375,6 +375,47 @@ namespace DateTime {
         dttimedata[kdid] = uSince
         dtdatedata[kdid] = { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
         return dtdatedata[kdid]
+    }
+
+        // Convert days to dd/ mm
+        const ddmm = dayOfYearToMonthAndDay(daysFromStartOfYear, y) // current year, y, not start year
+
+        return { month: ddmm.month, day: ddmm.day, year: y, dayOfYear: daysFromStartOfYear }
+    }
+
+    function timeSinceFor(timeSince: SecondsCount, kindid: number = null, uval: boolean=false): DateTime {
+        let sSinceStartOfYear = timeSince
+        // Find elapsed years by counting up from start year and subtracting off complete years
+        let y = 1
+        let leap = isLeapYear(y)
+        while ((!leap && sSinceStartOfYear > 365 * 24 * 60 * 60) || (sSinceStartOfYear > 366 * 24 * 60 * 60)) {
+            if (leap) {
+                sSinceStartOfYear -= 366 * 24 * 60 * 60
+            } else {
+                sSinceStartOfYear -= 365 * 24 * 60 * 60
+            }
+            y += 1
+            leap = isLeapYear(y)
+        }
+
+        // sSinceStartOfYear and leap are now for "y", not "year".  Don't use "year"! Use "y"
+        // Find elapsed days
+        const daysFromStartOfYear = Math.idiv(sSinceStartOfYear, (24 * 60 * 60)) + 1  // +1 offset for 1/1 being day 1
+        const secondsSinceStartOfDay = sSinceStartOfYear % (24 * 60 * 60)
+
+        // Find elapsed hours
+        const hoursFromStartOfDay = Math.idiv(secondsSinceStartOfDay, (60 * 60))
+        const secondsSinceStartOfHour = secondsSinceStartOfDay % (60 * 60)
+
+        // Find elapsed minutes
+        const minutesFromStartOfHour = Math.idiv(secondsSinceStartOfHour, (60))
+        // Find elapsed seconds
+        const secondsSinceStartOfMinute = secondsSinceStartOfHour % (60)
+
+        // Convert days to dd/ mm
+        const ddmm = dayOfYearToMonthAndDay(daysFromStartOfYear, y) // current year, y, not start year
+        
+        return { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
     }
 
     //% shim=timeanddate::cpuTimeInSeconds
@@ -515,6 +556,25 @@ namespace DateTime {
     }
 
     /**
+     * get time since from date and time
+     */
+    //% blockid=datetime_datetodaysince
+    //% block="time since as $dates and $times"
+    //% dates.shadow=datetime_dateshadow
+    //% dates.shadow=datetime_timeshadow
+    //% weight=20
+    export function dateAndTimeToTimeSince(dates: dates,times: times): SecondsCount {
+        let uyear = dates.year, umonth = dates.month, uday = dates.day
+        let uhour = times.hour, uminute = times.minute, usecond = times.second
+        umonth = Math.constrain(umonth, 1, 12)
+        let timeSince = 0
+        for (let yidx = 1;yidx < uyear;yidx++) timeSince += ((isLeapYear(yidx))?366:365)*(24*60*60);
+        timeSince += dateToDayOfYear(datevalue(umonth,uday,uyear))*(24*60*60)
+        timeSince += (uhour % 24)*(60*60), timeSince += (uminute % 60)*(60), timeSince += (usecond % 60)
+        return timeSince
+    }
+
+    /**
      * Get the Day of the week  
      *  0=>Monday, 1=>Tuesday, etc.
      */
@@ -561,13 +621,13 @@ namespace DateTime {
     export function myDateToAge(idate:dates,odate:dates) {
         let dateii = new dates(idate.month,idate.day,idate.year)
         let DsinceMin = dateToDaySince(datevalue(dateii.month,dateii.day,dateii.year))
-        let DateMin = dateFor(DsinceMin), LeapMin = isLeapYear(DateMin.year)
+        let DateMin = dateSinceFor(DsinceMin), LeapMin = isLeapYear(DateMin.year)
         let dateoo = new dates(odate.month,odate.day,odate.year)
         let DsinceMax = dateToDaySince(datevalue(dateoo.month,dateoo.day,dateoo.year))
-        let DateMax = dateFor(DsinceMax), LeapMax = isLeapYear(DateMax.year)
+        let DateMax = dateSinceFor(DsinceMax), LeapMax = isLeapYear(DateMax.year)
         let ageCount = 0
         let curY = DateMin.year, curDsince = dateToDaySince(datevalue(dateoo.month,dateoo.day,dateii.year))
-        let curDate = dateFor(curDsince), curLeap = isLeapYear(curDate.year)
+        let curDate = dateSinceFor(curDsince), curLeap = isLeapYear(curDate.year)
         while (curY <= DateMax.year) {
             if (curDate.year >= DateMax.year) {
                 if (LeapMin) ageCount += (curDate.dayOfYear > DateMin.dayOfYear &&(curDate.month > 2 && !curLeap))?1:0;
@@ -576,7 +636,7 @@ namespace DateTime {
                 ageCount++
             }
             curY++, curLeap = isLeapYear(curY)
-            curDsince += (curLeap)?366:365, curDate = dateFor(curDsince)
+            curDsince += (curLeap)?366:365, curDate = dateSinceFor(curDsince)
         }
         ageCount--
         return ageCount
@@ -592,17 +652,17 @@ namespace DateTime {
     export function dateAsTableList(idate:dates): number[] {
         let dateJ = new dates(idate.month,idate.day,idate.year)
         let dateCountI = dateToDaySince(datevalue(dateJ.month,dateJ.day,dateJ.year))
-        let dateI = dateFor(dateCountI)
+        let dateI = dateSinceFor(dateCountI)
         let dateWeek = dateToDayOfWeek(datevalue(dateI.month,dateI.day,dateI.year))
         while (dateI.month == dateJ.month || dateWeek != 0) {
             dateCountI--
-            dateI = dateFor(dateCountI)
+            dateI = dateSinceFor(dateCountI)
             dateWeek = dateToDayOfWeek(datevalue(dateI.month,dateI.day,dateI.year))
         }
         let tableDate: number[] = []
         let tableCol = 7, tableRow = 6
         for (let iin = 0; iin < tableCol*tableRow;iin++) {
-            dateI = dateFor(dateCountI+iin)
+            dateI = dateSinceFor(dateCountI+iin)
             tableDate.push((dateJ.month == dateI.month || (dateI.dayOfYear == 1)) ? dateI.dayOfYear-cdoy[dateI.month]+((dateI.month > 2 && isLeapYear(dateI.year)) ? 1 : 0) : -1)
         }
         return tableDate
