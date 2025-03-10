@@ -337,7 +337,7 @@ namespace DateTime {
 
     function timeFor(cpuTime: SecondsCount, kindid: number = null, uval: boolean=false): DateTime {
         const deltaTime = cpuTime - cpuTimeAtSetpoint
-        let sSinceStartOfYear = timeToSetpoint + deltaTime
+        let sSinceStartOfYear = timeToSetpoint + deltaTime, uSince = sSinceStartOfYear
         // Find elapsed years by counting up from start year and subtracting off complete years
         let y = startYear
         let leap = isLeapYear(y)
