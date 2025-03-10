@@ -377,12 +377,6 @@ namespace DateTime {
         return dtdatedata[kdid]
     }
 
-        // Convert days to dd/ mm
-        const ddmm = dayOfYearToMonthAndDay(daysFromStartOfYear, y) // current year, y, not start year
-
-        return { month: ddmm.month, day: ddmm.day, year: y, dayOfYear: daysFromStartOfYear }
-    }
-
     function timeSinceFor(timeSince: SecondsCount, kindid: number = null, uval: boolean=false): DateTime {
         let sSinceStartOfYear = timeSince
         // Find elapsed years by counting up from start year and subtracting off complete years
