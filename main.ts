@@ -885,7 +885,3 @@ namespace DateTime {
     // ********************************************************
 }
 
-let uval = DateTime.dateAsTableList(DateTime.datevalue(1, 20, 2022))
-let uval2 = DateTime.myDateToAge(DateTime.datevalue(5, 29, 2006),DateTime.datevalue(3,7,2025))
-
-scene.setBackgroundColor(1)
