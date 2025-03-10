@@ -73,7 +73,7 @@ namespace DateTime {
     function checkid(id: number) {
         if (id < 0) return 0
         id++
-        if (dtid.indexOf(id) >= 0) return dtid.indexOf(id)
+        if (!(dtid.indexOf(id) < 0)) return dtid.indexOf(id)
         curid++
         dtid.push(curid)
         dttimedata.push(0)
@@ -123,6 +123,15 @@ namespace DateTime {
         NY = 0,
         //% block="buddhist year"
         BHY = 543,
+    }
+
+    export enum OffsetWeek {
+        //% block="sunday"
+        SUN = 6,
+        //% block="saturday"
+        SAT = 5,
+        //% block="monday"
+        MON = 0
     }
     
     export enum MornNight {
@@ -301,7 +310,7 @@ namespace DateTime {
         return (((dateToDayOfYear(datevalue(m, d, y)) - 1) * 24 + hh) * 60 + mm) * 60 + ss
     }
 
-    function dateFor(dateCount: SecondsCount): DateTime {   
+    function dateFor(dateCount: SecondsCount): Date {   
         // Find elapsed years by counting up from start year and subtracting off complete years
         let startDateCount = dateCount
         let y = 1
@@ -318,12 +327,12 @@ namespace DateTime {
 
         // sSinceStartOfYear and leap are now for "y", not "year".  Don't use "year"! Use "y"
         // Find elapsed days
-        const daysFromStartOfYear = startDateCount + 1  // +1 offset for 1/1 being day 
+        const daysFromStartOfYear = Math.constrain(startDateCount,1,(isLeapYear(y))?366:365) // +1 offset for 1/1 being day 
 
         // Convert days to dd/ mm
         const ddmm = dayOfYearToMonthAndDay(daysFromStartOfYear, y) // current year, y, not start year
 
-        return { month: ddmm.month, day: ddmm.day, year: y, hour: 0, minute: 0, second: 0, dayOfYear: daysFromStartOfYear }
+        return { month: ddmm.month, day: ddmm.day, year: y, dayOfYear: daysFromStartOfYear }
     }
 
     function timeFor(cpuTime: SecondsCount, kindid: number = null, uval: boolean=false): DateTime {
@@ -362,7 +371,7 @@ namespace DateTime {
         let kdid = DateTimeData.mainDateTime 
         if (kindid) kdid = checkid(kindid);
         else kdid = checkid(kdid);
-        if (uval) return { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
+        if (uval == true) return { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
         dttimedata[kdid] = uSince
         dtdatedata[kdid] = { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
         return dtdatedata[kdid]
@@ -500,7 +509,7 @@ namespace DateTime {
         let uyear = dates.year, umonth = dates.month, uday = dates.day
         umonth = Math.constrain(umonth, 1, 12)
         let daySince = 0
-        for (let iiii = 1;iiii < uyear;iiii++) daySince += dateToDayOfYear(datevalue(12,31,iiii));
+        for (let yidx = 1;yidx < uyear;yidx++) daySince += (isLeapYear(yidx))?366:365;
         daySince += dateToDayOfYear(datevalue(umonth,uday,uyear))
         return daySince
     }
@@ -543,6 +552,36 @@ namespace DateTime {
         return dayOfYear
     }
 
+    //% blockId=datetime_mydatetoage
+    //% block ="get age from birthdate by $idate in current date by $odate"
+    //% idate.shadow=datetime_dateshadow
+    //% odate.shadow=datetime_dateshadow
+    //% kindn.shadow=datetime_kind
+    //% weight=14
+    export function myDateToAge(idate:dates,odate:dates) {
+        let dateii = new dates(idate.month,idate.day,idate.year)
+        let DsinceMin = dateToDaySince(datevalue(dateii.month,dateii.day,dateii.year))
+        let DateMin = dateFor(DsinceMin), LeapMin = isLeapYear(DateMin.year)
+        let dateoo = new dates(odate.month,odate.day,odate.year)
+        let DsinceMax = dateToDaySince(datevalue(dateoo.month,dateoo.day,dateoo.year))
+        let DateMax = dateFor(DsinceMax), LeapMax = isLeapYear(DateMax.year)
+        let ageCount = 0
+        let curY = DateMin.year, curDsince = dateToDaySince(datevalue(dateoo.month,dateoo.day,dateii.year))
+        let curDate = dateFor(curDsince), curLeap = isLeapYear(curDate.year)
+        while (curY <= DateMax.year) {
+            if (curDate.year >= DateMax.year) {
+                if (LeapMin) ageCount += (curDate.dayOfYear > DateMin.dayOfYear &&(curDate.month > 2 && !curLeap))?1:0;
+                else ageCount -= (curDate.dayOfYear > DateMin.dayOfYear &&(curDate.month > 2 && curLeap))?1:0;
+            } else if (curDate.year < DateMax.year) {
+                ageCount++
+            }
+            curY++, curLeap = isLeapYear(curY)
+            curDsince += (curLeap)?366:365, curDate = dateFor(curDsince)
+        }
+        ageCount--
+        return ageCount
+    }
+
     /**
      * create calendar table from date
      */
@@ -555,7 +594,7 @@ namespace DateTime {
         let dateCountI = dateToDaySince(datevalue(dateJ.month,dateJ.day,dateJ.year))
         let dateI = dateFor(dateCountI)
         let dateWeek = dateToDayOfWeek(datevalue(dateI.month,dateI.day,dateI.year))
-        while (dateI.month == dateJ.month || (dateI.month != dateJ.month && dateWeek != 0)) {
+        while (dateI.month == dateJ.month || dateWeek != 0) {
             dateCountI--
             dateI = dateFor(dateCountI)
             dateWeek = dateToDayOfWeek(datevalue(dateI.month,dateI.day,dateI.year))
@@ -564,7 +603,7 @@ namespace DateTime {
         let tableCol = 7, tableRow = 6
         for (let iin = 0; iin < tableCol*tableRow;iin++) {
             dateI = dateFor(dateCountI+iin)
-            tableDate.push((dateJ.month == dateI.month) ? dateI.day : 0)
+            tableDate.push((dateJ.month == dateI.month || (dateI.dayOfYear == 1)) ? dateI.dayOfYear-cdoy[dateI.month]+((dateI.month > 2 && isLeapYear(dateI.year)) ? 1 : 0) : -1)
         }
         return tableDate
     }
@@ -792,3 +831,7 @@ namespace DateTime {
     // ********************************************************
 }
 
+let uval = DateTime.dateAsTableList(DateTime.datevalue(1, 20, 2022))
+let uval2 = DateTime.myDateToAge(DateTime.datevalue(5, 29, 2006),DateTime.datevalue(3,7,2025))
+
+scene.setBackgroundColor(1)
