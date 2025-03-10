@@ -1,4 +1,3 @@
-
 namespace DateTimeData {
 
     let kindid: number;
@@ -472,9 +471,6 @@ namespace DateTime {
     //% blockid=datetime_setdate
     //% block="set date to $dates|| to datetime kind $kindn"
     //% kindn.shadow=datetime_kind
-    //% month.min=1 month.max=12 month.defl=1
-    //% day.min=1 day.max=31 day.defl=20
-    //% year.min=2020 year.max=2050 year.defl=2022
     //% dates.shadow=datetime_dateshadow
     //% weight=80
     export function setDate(dates: dates, kindn: number = null, uval: boolean = false) {
@@ -497,9 +493,6 @@ namespace DateTime {
      */
     //% block=datetime_settime
     //% block="set time to $times $ampm|| to datetime kind $kindn"
-    //% hour.min=1 hour.max=12 hour.defl=11
-    //% minute.min=0 minute.max=59 minute.defl=30
-    //% second.min=0 second.max=59 second.defl=0
     //% kindn.shadow=datetime_kind
     //% times.shadow=datetime_halftimeshadow
     //% inlineInputMode=inline
@@ -555,7 +548,7 @@ namespace DateTime {
     //% blockid=datetime_datetodaysince
     //% block="time since as $dates and $times"
     //% dates.shadow=datetime_dateshadow
-    //% dates.shadow=datetime_timeshadow
+    //% times.shadow=datetime_timeshadow
     //% weight=20
     export function dateAndTimeToTimeSince(dates: dates,times: times): SecondsCount {
         let uyear = dates.year, umonth = dates.month, uday = dates.day
@@ -884,4 +877,3 @@ namespace DateTime {
 
     // ********************************************************
 }
-
