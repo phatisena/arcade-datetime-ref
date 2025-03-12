@@ -606,7 +606,7 @@ namespace DateTime {
      * @param odate the currentdate value
      */
     //% blockId=datetime_mydatetoage
-    //% block ="get age from birthdate by $idate in current date by $odate"
+    //% block="get age from birthdate by $idate in current date by $odate"
     //% idate.shadow=datetime_dateshadow
     //% odate.shadow=datetime_dateshadow
     //% kindn.shadow=datetime_kind
