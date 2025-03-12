@@ -60,7 +60,7 @@ namespace DateTime {
  * 16MHz clock, which is crystal based and should have an accuracy near 10 part per million, 
  * or about 0.864 seconds/day.
  *
- * @author Bill Siever
+ * @cradit Bill Siever
  */
 //% block="Time and Date"
 //% color="#AA278D"  icon="\uf017"
@@ -309,10 +309,12 @@ namespace DateTime {
         return (((dateToDayOfYear(datevalue(m, d, y)) - 1) * 24 + hh) * 60 + mm) * 60 + ss
     }
 
-    function dateSinceFor(dateSince: SecondsCount): Date {   
+    function dateSinceFor(dateSince: SecondsCount, offsetSince: SecondsCount=0, offsetYear: Year=0): Date {   
         // Find elapsed years by counting up from start year and subtracting off complete years
         let startDateCount = dateSince
+        if (offsetSince > 0) startDateCount -= offsetSince
         let y = 1
+        if (offsetYear > 0) y = offsetYear
         let leap = isLeapYear(y)
         while ((!leap && startDateCount > 365) || (startDateCount > 366)) {
             if (leap) {
@@ -376,10 +378,12 @@ namespace DateTime {
         return dtdatedata[kdid]
     }
 
-    function timeSinceFor(timeSince: SecondsCount, kindid: number = null, uval: boolean=false): DateTime {
+    function timeSinceFor(timeSince: SecondsCount, offsetSince: SecondsCount=0, offsetYear: Year=0): DateTime {
         let sSinceStartOfYear = timeSince
+        if (offsetSince > 0) sSinceStartOfYear -= offsetSince
         // Find elapsed years by counting up from start year and subtracting off complete years
         let y = 1
+        if (offsetYear > 0) y = offsetYear
         let leap = isLeapYear(y)
         while ((!leap && sSinceStartOfYear > 365 * 24 * 60 * 60) || (sSinceStartOfYear > 366 * 24 * 60 * 60)) {
             if (leap) {
@@ -442,9 +446,7 @@ namespace DateTime {
 
     /**
      * Set the time using 24-hour format. 
-     * @param hour the hour (0-23)
-     * @param minute the minute (0-59)
-     * @param second the second (0-59)
+     * @param time from hour the hour (0-23), minute the minute (0-59), @param second the second (0-59)
      */
     //% blockid=datetime_set24hrtime
     //% block="set time from 24-hour time $times|| to datetime kind $kindn"
@@ -464,9 +466,7 @@ namespace DateTime {
 
     /**
      * Set the date
-     * @param month the month 1-12
-     * @param day the day of the month 1-31
-     * @param the year 2020-2050
+     * @param date from month the month 1-12, day the day of the month 1-31, @param the year 2020-2050
      */
     //% blockid=datetime_setdate
     //% block="set date to $dates|| to datetime kind $kindn"
@@ -486,9 +486,7 @@ namespace DateTime {
 
     /**
      * Set the time using am/pm format
-     * @param hour the hour (1-12)
-     * @param minute the minute (0-59)
-     * @param second the second (0-59)
+     * @param time from hour the hour (1-12), minute the minute (0-59), second the second (0-59)
      * @param ampm morning or night
      */
     //% block=datetime_settime
@@ -528,6 +526,7 @@ namespace DateTime {
 
     /**
      * get day since from date
+     * @param date of month day year
      */
     //% blockid=datetime_datetodaysince
     //% block="day since as $dates"
@@ -544,6 +543,8 @@ namespace DateTime {
 
     /**
      * get time since from date and time
+     * @param date of month day year
+     * @param time of hour minute second
      */
     //% blockid=datetime_datetodaysince
     //% block="time since as $dates and $times"
@@ -563,7 +564,7 @@ namespace DateTime {
 
     /**
      * Get the Day of the week  
-     *  0=>Monday, 1=>Tuesday, etc.
+     * @param 0=>Monday, 1=>Tuesday, etc.
      */
     //% blockid=datetime_date2dayweek
     //% block="day of week for $dates" advanced=true
@@ -581,7 +582,7 @@ namespace DateTime {
 
     /**
      * Get the Day of the year  
-     *  Jan 1 = 1, Jan 2=2, Dec 31 is 365 or 366
+     * @param Jan 1 = 1, Jan 2=2, Dec 31 is 365 or 366
      */
     //% blockid=datetime_date2dayyear
     //% block="day of year for $dates" advanced=true
@@ -599,6 +600,11 @@ namespace DateTime {
         return dayOfYear
     }
 
+    /**
+     * calculate my age from my birthdate in current date
+     * @param idate the birthdate value
+     * @param odate the currentdate value
+     */
     //% blockId=datetime_mydatetoage
     //% block ="get age from birthdate by $idate in current date by $odate"
     //% idate.shadow=datetime_dateshadow
@@ -623,7 +629,7 @@ namespace DateTime {
                 ageCount++
             }
             curY++, curLeap = isLeapYear(curY)
-            curDsince += (curLeap)?366:365, curDate = dateSinceFor(curDsince)
+            curDsince += (curLeap)?366:365, curDate = dateSinceFor(curDsince,DsinceMin,DateMin.year)
         }
         ageCount--
         return ageCount
@@ -631,6 +637,7 @@ namespace DateTime {
 
     /**
      * create calendar table from date
+     * @param idate the date to create raw calendar
      */
     //% blockid=datetime_datetable
     //% block="calendar table as $idate"
@@ -877,3 +884,5 @@ namespace DateTime {
 
     // ********************************************************
 }
+
+
