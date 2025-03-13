@@ -12,11 +12,21 @@ namespace DateTimeData {
 
 }
 
+/**
+ * Provides a software based running clock for the time and date for the arcade. 
+ * The makecode arcade doesn't have a true real-time clock. The arcade uses a timer derived from the
+ * 16MHz clock, which is crystal based and should have an accuracy near 10 part per million, 
+ * or about 0.864 seconds/day.
+ *
+ * @cradit Bill Siever
+ */
+//% block="Time and Date"
+//% color="#AA278D"  icon="\uf017"
 namespace DateTime {
-    
-    export class dates { constructor(public month:number,public day:number,public year:number) {} }
 
-    export class times { constructor(public hour:number,public minute:number,public second:number) {} }
+    export class dates { constructor(public month: number, public day: number, public year: number) { } }
+
+    export class times { constructor(public hour: number, public minute: number, public second: number) { } }
 
     //% shim=KIND_GET
     //% blockHidden=true
@@ -33,7 +43,7 @@ namespace DateTime {
     //% month.min=1 month.max=12 month.defl=1
     //% day.min=1 day.max=31 day.defl=20
     //% year.min=2020 year.max=2050 year.defl=2022
-    export function datevalue(month:number,day:number,year:number) { return new dates(month,day,year) }
+    export function datevalue(month: number, day: number, year: number) { return new dates(month, day, year) }
 
     //% blockHidden=true
     //% blockId=datetime_timeshadow
@@ -41,7 +51,7 @@ namespace DateTime {
     //% hour.min=0 hour.max=23 hour.defl=13
     //% min.min=0 min.max=59 min.defl=30
     //% sec.min=0 sec.max=59 sec.defl=0
-    export function time24value(hour: number, min: number, sec: number) { return new times(hour,min,sec) }
+    export function time24value(hour: number, min: number, sec: number) { return new times(hour, min, sec) }
 
     //% blockHidden=true
     //% blockId=datetime_halftimeshadow
@@ -49,35 +59,18 @@ namespace DateTime {
     //% hour.min=1 hour.max=12 hour.defl=11
     //% min.min=0 min.max=59 min.defl=30
     //% sec.min=0 sec.max=59 sec.defl=0
-    export function time12value(hour: number, min: number, sec: number) { return new times(hour,min,sec) }
+    export function time12value(hour: number, min: number, sec: number) { return new times(hour, min, sec) }
 
+    let dtdata: DateTime[] = [], dtformatdata: number[][] = [], dtid: number[] = [], curarg = 0
 
-}
-
-/**
- * Provides a software based running clock for the time and date for the arcade. 
- * The makecode arcade doesn't have a true real-time clock. The arcade uses a timer derived from the
- * 16MHz clock, which is crystal based and should have an accuracy near 10 part per million, 
- * or about 0.864 seconds/day.
- *
- * @cradit Bill Siever
- */
-//% block="Time and Date"
-//% color="#AA278D"  icon="\uf017"
-namespace DateTime {
-
-    let dtdata: DateTime[] = [], dtformatdata: number[][] = [], dtid: number[] = [], curid = 0
-    dtid.push(0), dtformatdata.push([0, 0, 0]), dtdata.push({ month: 0, year: 0, day: 0, hour: 0, minute: 0, second: 0, dayOfYear: 0 })
-
-    function checkid(id: number) {
-        if (id < 0) return 0
-        id++
-        if (!(dtid.indexOf(id) < 0)) return dtid.indexOf(id)
-        curid++
-        dtid.push(curid)
-        dtformatdata.push([0, 0, 0])
-        dtdata.push({ month: 0, year: 0, day: 0, hour: 0, minute: 0, second: 0, dayOfYear: 0 })
-        return dtid.length - 1
+    function checkid(arg: number): number {
+        if (dtid.indexOf(arg) < 0) {
+            dtid.push(curarg++)
+            dtformatdata.push([0, 0, 0])
+            dtdata.push({ month: 0, year: 0, day: 0, hour: 0, minute: 0, second: 0, dayOfYear: 0 })
+            return dtid.length - 1
+        }
+        return arg
     }
 
     /* 
@@ -347,7 +340,7 @@ namespace DateTime {
         return { month: ddmm.month, day: ddmm.day, year: y, dayOfYear: daysFromStartOfYear }
     }
 
-    function timeFor(cpuTime: SecondsCount, kindid: number = null, uval: boolean=false): DateTime {
+    function timeFor(cpuTime: SecondsCount, kindid: number = null, guest: boolean=false): DateTime {
         const deltaTime = cpuTime - cpuTimeAtSetpoint
         let sSinceStartOfYear = timeToSetpoint + deltaTime, uSince = sSinceStartOfYear
         // Find elapsed years by counting up from start year and subtracting off complete years
@@ -381,11 +374,14 @@ namespace DateTime {
         const ddmm = dayOfYearToMonthAndDay(daysFromStartOfYear, y) // current year, y, not start year
         
         let kdid = curKind
-        if (kindid) kdid = checkid(kindid);
-        else kdid = checkid(kdid);
-        if (uval == true) return { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
+        if (kindid) {
+            kdid = checkid(kindid)
+        } else {
+            kdid = checkid(kdid)
+        }
         dtformatdata[kdid] = [startYear, timeToSetpoint, cpuTimeAtSetpoint]
         dtdata[kdid] = { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
+        if (guest) return { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
         return dtdata[kdid]
     }
 
@@ -426,7 +422,7 @@ namespace DateTime {
         return { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
     }
 
-    //% shim=timeanddate::cpuTimeInSeconds
+    //% shim=datetime::cpuTimeInSeconds
     function cpuTimeInSeconds(): uint32 {
         return Math.idiv(game.runtime(), 1000)
     }
@@ -469,7 +465,7 @@ namespace DateTime {
         const uid = checkid(curKind)
         startYear = dtformatdata[uid][0]
         timeToSetpoint = dtformatdata[uid][1]
-        cpuTimeAtSetpoint = dtformatdata[uid][2]
+        cpuTimeAtSetpoint = cpuTimeInSeconds()
     }
 
     /**
@@ -957,4 +953,6 @@ namespace DateTime {
     // ********************************************************
 }
 
-let uval = DateTime.myDateToAge(DateTime.datevalue(5, 29, 2006), DateTime.datevalue(3, 13, 2025))
+game.onUpdate(function() {
+    const uval = DateTime.getDataOfKind(DateTime.DropDatetime.Second, DateTimeData.mainDateTime)
+})
