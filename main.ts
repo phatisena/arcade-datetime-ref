@@ -86,7 +86,7 @@ namespace DateTime {
     game.onUpdateInterval(864, function() {
         // Only run about every 2 s;  Micro:bit uses a ticker with a 32kHz period, so the count should increase by about 65kHz for arcade or etc.
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime, DateTimeData.mainDateTime)
+        const t = timeFor(cpuTime, curKind)
         if (lastUpdateMinute != t.minute) {
             // New minute
             control.raiseEvent(TIME_AND_DATE_EVENT, TIME_AND_DATE_NEWMINUTE)
@@ -239,6 +239,7 @@ namespace DateTime {
     let startYear: Year = 0
     let timeToSetpoint: SecondsCount = 0
     let cpuTimeAtSetpoint: SecondsCount = 0
+    let curKind = DateTimeData.mainDateTime
 
     /*    
     Time is all relative to the "start year" that is set by setDate() (or 0 by default) as follows:
@@ -312,7 +313,7 @@ namespace DateTime {
     function dateSinceFor(dateSince: SecondsCount, offsetSince: SecondsCount=0, offsetYear: Year=0): Date {   
         // Find elapsed years by counting up from start year and subtracting off complete years
         let startDateCount = dateSince
-        if (offsetSince > 0) startDateCount -= offsetSince
+        if (offsetSince > 0 && dateSince > offsetSince) startDateCount -= offsetSince
         let y = 1
         if (offsetYear > 0) y = offsetYear
         let leap = isLeapYear(y)
@@ -369,7 +370,7 @@ namespace DateTime {
         // Convert days to dd/ mm
         const ddmm = dayOfYearToMonthAndDay(daysFromStartOfYear, y) // current year, y, not start year
         
-        let kdid = DateTimeData.mainDateTime 
+        let kdid = curKind
         if (kindid) kdid = checkid(kindid);
         else kdid = checkid(kdid);
         if (uval == true) return { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
@@ -380,7 +381,7 @@ namespace DateTime {
 
     function timeSinceFor(timeSince: SecondsCount, offsetSince: SecondsCount=0, offsetYear: Year=0): DateTime {
         let sSinceStartOfYear = timeSince
-        if (offsetSince > 0) sSinceStartOfYear -= offsetSince
+        if (offsetSince > 0 && timeSince > offsetSince) sSinceStartOfYear -= offsetSince
         // Find elapsed years by counting up from start year and subtracting off complete years
         let y = 1
         if (offsetYear > 0) y = offsetYear
@@ -443,6 +444,19 @@ namespace DateTime {
 
     // ********* Exposed blocks ************************
 
+    /**
+     * Set the default kind to process
+     * @param datetime kind to get
+     */
+    //% block=datetime_setdefaultkind
+    //% block="set default kind to $kindn"
+    //% kindn.shadow=datetime_kind
+    //% inlineInputMode=inline
+    //% weight=135
+    export function setCurKind(kindn: number) {
+        if (curKind == kindn) return;
+        curKind = kindn
+    }
 
     /**
      * Set the time using 24-hour format. 
@@ -612,19 +626,21 @@ namespace DateTime {
     //% kindn.shadow=datetime_kind
     //% weight=14
     export function myDateToAge(idate:dates,odate:dates) {
-        let dateii = new dates(idate.month,idate.day,idate.year)
-        let DsinceMin = dateToDaySince(datevalue(dateii.month,dateii.day,dateii.year))
-        let DateMin = dateSinceFor(DsinceMin), LeapMin = isLeapYear(DateMin.year)
-        let dateoo = new dates(odate.month,odate.day,odate.year)
-        let DsinceMax = dateToDaySince(datevalue(dateoo.month,dateoo.day,dateoo.year))
-        let DateMax = dateSinceFor(DsinceMax), LeapMax = isLeapYear(DateMax.year)
-        let ageCount = 0
+        let dateii = new dates(idate.month,idate.day,idate.year), DsinceMin = dateToDaySince(datevalue(dateii.month,dateii.day,dateii.year)), DateMin = dateSinceFor(DsinceMin), LeapMin = isLeapYear(DateMin.year)
+        let dateoo = new dates(odate.month,odate.day,odate.year), DsinceMax = dateToDaySince(datevalue(dateoo.month,dateoo.day,dateoo.year)), DateMax = dateSinceFor(DsinceMax), LeapMax = isLeapYear(DateMax.year)
         let curY = DateMin.year, curDsince = dateToDaySince(datevalue(dateoo.month,dateoo.day,dateii.year))
         let curDate = dateSinceFor(curDsince), curLeap = isLeapYear(curDate.year)
+        let uDayYear = 0, ageCount = 0
         while (curY <= DateMax.year) {
             if (curDate.year >= DateMax.year) {
-                if (LeapMin) ageCount += (curDate.dayOfYear > DateMin.dayOfYear &&(curDate.month > 2 && !curLeap))?1:0;
-                else ageCount -= (curDate.dayOfYear > DateMin.dayOfYear &&(curDate.month > 2 && curLeap))?1:0;
+                uDayYear = curDate.dayOfYear
+                if (LeapMin) {
+                    if (curDate.month > 2 && !curLeap) uDayYear++
+                    if (uDayYear > DateMin.dayOfYear) ageCount++
+                } else {
+                    if (curDate.month > 2 && curLeap) uDayYear--
+                    if (uDayYear > DateMin.dayOfYear) ageCount++
+                } 
             } else if (curDate.year < DateMax.year) {
                 ageCount++
             }
