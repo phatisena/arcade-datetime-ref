@@ -66,8 +66,8 @@ namespace DateTime {
 //% color="#AA278D"  icon="\uf017"
 namespace DateTime {
 
-    let dtdatedata: DateTime[] = [], dttimedata: number[] = [], dtid: number[] = [], curid = 0
-    dtid.push(0), dtdatedata.push({ month: 0, year: 0, day: 0, hour: 0, minute: 0, second: 0, dayOfYear: 0 })
+    let dtdata: DateTime[] = [], dtformatdata: number[][] = [], dtid: number[] = [], curid = 0
+    dtid.push(0), dtformatdata.push([0, 0, 0]), dtdata.push({ month: 0, year: 0, day: 0, hour: 0, minute: 0, second: 0, dayOfYear: 0 })
 
     function checkid(id: number) {
         if (id < 0) return 0
@@ -75,8 +75,8 @@ namespace DateTime {
         if (!(dtid.indexOf(id) < 0)) return dtid.indexOf(id)
         curid++
         dtid.push(curid)
-        dttimedata.push(0)
-        dtdatedata.push({ month: 0, year: 0, day: 0, hour: 0, minute: 0, second: 0, dayOfYear: 0 })
+        dtformatdata.push([0, 0, 0])
+        dtdata.push({ month: 0, year: 0, day: 0, hour: 0, minute: 0, second: 0, dayOfYear: 0 })
         return dtid.length - 1
     }
 
@@ -85,8 +85,9 @@ namespace DateTime {
     */
     game.onUpdateInterval(864, function() {
         // Only run about every 2 s;  Micro:bit uses a ticker with a 32kHz period, so the count should increase by about 65kHz for arcade or etc.
+        const curId = curKind
         const cpuTime = cpuTimeInSeconds()
-        const t = timeFor(cpuTime, curKind)
+        const t = timeFor(cpuTime, curId)
         if (lastUpdateMinute != t.minute) {
             // New minute
             control.raiseEvent(TIME_AND_DATE_EVENT, TIME_AND_DATE_NEWMINUTE)
@@ -122,6 +123,15 @@ namespace DateTime {
         NY = 0,
         //% block="buddhist year"
         BHY = 543,
+    }
+
+    export enum DropDatetime {
+        Month = 0,
+        Day = 1,
+        Year = 2,
+        Hour = 3,
+        Minute = 4,
+        Second = 5
     }
 
     export enum OffsetWeek {
@@ -374,9 +384,9 @@ namespace DateTime {
         if (kindid) kdid = checkid(kindid);
         else kdid = checkid(kdid);
         if (uval == true) return { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
-        dttimedata[kdid] = uSince
-        dtdatedata[kdid] = { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
-        return dtdatedata[kdid]
+        dtformatdata[kdid] = [startYear, timeToSetpoint, cpuTimeAtSetpoint]
+        dtdata[kdid] = { month: ddmm.month, day: ddmm.day, year: y, hour: hoursFromStartOfDay, minute: minutesFromStartOfHour, second: secondsSinceStartOfMinute, dayOfYear: daysFromStartOfYear }
+        return dtdata[kdid]
     }
 
     function timeSinceFor(timeSince: SecondsCount, offsetSince: SecondsCount=0, offsetYear: Year=0): DateTime {
@@ -456,6 +466,52 @@ namespace DateTime {
     export function setCurKind(kindn: number) {
         if (curKind == kindn) return;
         curKind = kindn
+        const uid = checkid(curKind)
+        startYear = dtformatdata[uid][0]
+        timeToSetpoint = dtformatdata[uid][1]
+        cpuTimeAtSetpoint = dtformatdata[uid][2]
+    }
+
+    /**
+     * get the datetime value from kind data
+     * @param dropdown of datetime list
+     * @param datetime kind to get
+     */
+    //% block=datetime_getvaluefromkinddata
+    //% block="get $dt from datetime kind $kindn"
+    //% kindn.shadow=datetime_kind
+    //% inlineInputMode=inline
+    //% weight=133
+    export function getDataOfKind(dt: DropDatetime, kindn: number) {
+        const uid = checkid(kindn)
+        const udatetime = dtdata[uid]
+        switch (dt) {
+            case 0:
+                return udatetime.month
+                break
+
+            case 1:
+                return udatetime.day
+                break
+
+            case 2:
+                return udatetime.year
+                break
+
+            case 3:
+                return udatetime.hour
+                break
+
+            case 4:
+                return udatetime.minute
+                break
+
+            case 5:
+                return udatetime.second
+                break
+
+        }
+        return -1
     }
 
     /**
@@ -633,7 +689,7 @@ namespace DateTime {
         let uDayYear = 0, ageCount = 0
         while (curY <= DateMax.year) {
             if (curDate.year >= DateMax.year) {
-                uDayYear = curDate.dayOfYear
+                uDayYear = dateToDayOfYear(datevalue(curDate.month,curDate.day,curDate.year))
                 if (LeapMin) {
                     if (curDate.month > 2 && !curLeap) uDayYear++
                     if (uDayYear > DateMin.dayOfYear) ageCount++
@@ -647,7 +703,7 @@ namespace DateTime {
             curY++, curLeap = isLeapYear(curY)
             curDsince += (curLeap)?366:365, curDate = dateSinceFor(curDsince,DsinceMin,DateMin.year)
         }
-        ageCount--
+        ageCount = Math.max(ageCount-2,0)
         return ageCount
     }
 
@@ -901,4 +957,4 @@ namespace DateTime {
     // ********************************************************
 }
 
-
+let uval = DateTime.myDateToAge(DateTime.datevalue(5, 29, 2006), DateTime.datevalue(3, 13, 2025))
